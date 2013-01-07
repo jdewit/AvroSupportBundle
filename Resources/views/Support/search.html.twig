@@ -1,0 +1,9 @@
+{% extends 'AvroSupportBundle::layout.html.twig' %}
+{% block support_content %}
+    <div class="page-header">
+        <a class="btn btn-large pull-right" href="{{ path('avro_support_support_index') }}"><i class="icon-arrow-left"></i> Back</a>
+        <h1>Results for: <small>{{ query }}</small></h1>
+    </div>
+    {% include 'AvroSupportBundle:Support:results.html.twig' %}
+{% endblock %}
+

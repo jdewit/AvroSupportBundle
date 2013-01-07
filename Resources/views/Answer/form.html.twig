@@ -1,0 +1,8 @@
+<div id="error-container">
+    {{ form_errors(form) }}
+</div>
+<div class="form-content">
+    {{ form_row(form.body) }}
+
+    {{ form_widget(form._token) }}
+</div>

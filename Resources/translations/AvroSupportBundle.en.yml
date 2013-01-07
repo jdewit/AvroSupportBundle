@@ -1,0 +1,48 @@
+question:
+    created:
+        user:
+            subject: We've received your question
+            message: |
+                Hi %name%
+
+                We have received your question and will respond as soon as possible.
+
+                %email_signature%
+
+                -----------------------------------
+                View Question: %showUrl%
+                -----------------------------------
+        admin:
+            subject: %name% has a question
+            message: |
+                %title%
+
+                %body%
+
+                ---
+
+                %showUrl%
+answer:
+    created:
+        user:
+            subject: You have received an answer to your question
+            message: |
+                Hi %name%,
+
+                Click the link below to view the answer to your question.
+
+                %showUrl%
+                
+                Please mark your question as solved if this answered your question by clicking the link below.
+                %solvedUrl%
+
+                %email_signature%
+
+        admin:
+            subject:
+
+            message:
+
+    flash:
+        created: Your question has been submitted
+        updated: Your question has been updated

@@ -1,0 +1,42 @@
+<form method="post" action="{{ path('avro_support_answer_batch') }}">  
+    <table class="table-condensed table-bordered table-striped">
+        <thead>
+            <tr>
+                <th title="Select All"><input id="checkAll" type="checkbox"/></th>
+                <th>Question</th>
+                <th>Author</th>
+                <th>Body</th>
+                <th>Ispublic</th>
+                <th>Issolution</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for answer in answers %}
+                <tr>
+                    <td><input class="selector" type="checkbox" name="selected[]" value="{{ answer.id }}"/></td>
+                    <td class="showSpriteOnHover"><a title="Edit this answer" href="{{ path('avro_support_answer_edit', {'id': answer.id }) }}"><i class="sprite-pencil"></i>{{ answer.id }}</a></td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="0">0 answers Found</td>
+                </tr>
+             {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="100%">
+                    {% if answers %}
+                        <i class="sprite-arrow-left-up"></i>
+                       {% if filter != 'Deleted' %}
+                            <button type="submit" name="form_action" value="Delete" class="btn btn-danger confirm" title="Are you sure you want to delete these answers?">Delete</button>
+                        {% else %}
+                            <button type="submit" name="form_action" value="Restore" class="btn btn-info confirm" title="Are you sure you want to restore these answers?">Restore</button>
+                        {% endif %}
+                    {% else %}
+                        &nbsp;
+                    {% endif %}
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+</form>

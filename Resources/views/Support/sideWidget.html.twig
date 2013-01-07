@@ -1,0 +1,10 @@
+<div class="well">
+    <h3 class="underline left-align">Categories</h3>
+    <ul class="unstyled left-align">
+        {% for category in categories %}
+            <li><a href="{{ path('avro_support_support_search_category', {'slug': category.slug}) }}">{{ category.name }}</a></li>
+            <hr class="soften" style="margin: 5px 0;" />
+        {% endfor %}
+    </ul>
+</div>
+

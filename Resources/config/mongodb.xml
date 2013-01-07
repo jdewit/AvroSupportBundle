@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+
+        <service id="avro_support.question_manager" class="Avro\SupportBundle\Document\QuestionManager" scope="request">
+            <argument type="service" id="avro_support.document_manager" />
+            <argument type="service" id="request" />
+            <argument type="service" id="knp_paginator" />
+            <argument>%avro_support.question.class%</argument>
+        </service>
+
+        <service id="avro_support.answer_manager" class="Avro\SupportBundle\Document\AnswerManager">
+            <argument type="service" id="avro_support.document_manager" />
+            <argument>%avro_support.answer.class%</argument>
+        </service>
+
+        <service id="avro_support.category_manager" class="Avro\SupportBundle\Document\CategoryManager" scope="request">
+            <argument type="service" id="avro_support.document_manager" />
+            <argument type="service" id="request" />
+            <argument type="service" id="knp_paginator" />
+            <argument>%avro_support.category.class%</argument>
+        </service>
+
+        <service id="avro_support.document_manager" factory-service="doctrine_mongodb" factory-method="getManager" class="Doctrine\ODM\MongoDB\DocumentManager" public="false">
+        </service>
+
+    </services>
+
+</container>

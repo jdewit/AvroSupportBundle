@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="avro_support.question.form.name">avro_support_question</parameter>
+        <parameter key="avro_support.question.form.type">Avro\SupportBundle\Form\Type\QuestionFormType</parameter>
+    </parameters>
+
+    <services>
+
+        <service id="avro_support.question.form" factory-method="createNamed" factory-service="form.factory" class="Symfony\Component\Form\Form">
+            <argument>%avro_support.question.form.name%</argument>
+            <argument>%avro_support.question.form.type%</argument>
+            <argument>null</argument>
+        </service>
+
+        <service id="avro_support.question.form.type" class="Avro\SupportBundle\Form\Type\QuestionFormType">
+            <tag name="form.type" alias="avro_support_question" />
+            <argument type="service" id="security.context" />
+            <argument>%avro_support.question.class%</argument>
+            <argument>%avro_support.category.class%</argument>
+        </service>
+
+        <service id="avro_support.question.form.handler" class="Avro\SupportBundle\Form\Handler\QuestionFormHandler" scope="request" >
+            <argument type="service" id="avro_support.question.form" />
+            <argument type="service" id="request" />
+            <argument type="service" id="event_dispatcher" />
+            <argument type="service" id="avro_support.question_manager" />
+        </service>
+
+        <service id ="avro_support.question.listener" class="Avro\SupportBundle\Listener\QuestionListener">
+            <argument type="service" id="avro_support.mailer" />
+            <argument type="service" id="security.context" />
+            <tag name="kernel.event_listener" event="avro_support.question_create" method="create" />
+            <tag name="kernel.event_listener" event="avro_support.question_created" method="created" />
+            <tag name="kernel.event_listener" event="avro_support.question_update" method="update" />
+            <tag name="kernel.event_listener" event="avro_support.question_updated" method="updated" />
+        </service>
+    </services>
+
+</container>

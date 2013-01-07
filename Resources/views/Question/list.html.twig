@@ -1,0 +1,20 @@
+{% extends 'AvroSupportBundle::layout.html.twig' %}
+{% block support_content %}
+    <div class="page-header">
+        <a class="btn btn-primary btn-large pull-right" href="{{ path('avro_support_question_new') }}"><i class="icon-plus icon-white"></i> New Question</a>
+        <h1>
+            My Questions
+            <div class="btn-group">
+                <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">{{ filter }} <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    <li><a href="{{ path('avro_support_question_list', {'filter': 'Open'}) }}"><i class="icon-minus"></i> Open</a></li>
+                    <li><a href="{{ path('avro_support_question_list', {'filter': 'Solved'}) }}"><i class="icon-ok"></i> Solved</a></li>
+                </ul>
+            </div>
+        </h1>
+    </div>
+    <div id="questionList" class="row-fluid">
+        {% include 'AvroSupportBundle:Question:table.html.twig' %}
+    </div>
+{% endblock %}
+

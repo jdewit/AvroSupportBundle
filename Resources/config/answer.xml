@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="avro_support.answer.form.name">avro_support_answer</parameter>
+        <parameter key="avro_support.answer.form.type">Avro\SupportBundle\Form\Type\AnswerFormType</parameter>
+    </parameters>
+
+    <services>
+
+        <service id="avro_support.answer.form" factory-method="createNamed" factory-service="form.factory" class="Symfony\Component\Form\Form">
+            <argument>%avro_support.answer.form.name%</argument>
+            <argument>%avro_support.answer.form.type%</argument>
+            <argument>null</argument>
+        </service>
+
+        <service id="avro_support.answer.form.type" class="Avro\SupportBundle\Form\Type\AnswerFormType">
+            <tag name="form.type" alias="avro_support_answer" />
+            <argument>%avro_support.answer.class%</argument>
+        </service>
+
+        <service id="avro_support.answer.form.handler" class="Avro\SupportBundle\Form\Handler\AnswerFormHandler" scope="request" >
+            <argument type="service" id="avro_support.answer.form" />
+            <argument type="service" id="request" />
+            <argument type="service" id="event_dispatcher" />
+            <argument type="service" id="avro_support.answer_manager" />
+            <argument type="service" id="avro_support.question_manager" />
+        </service>
+
+        <service id ="avro_support.answer.listener" class="Avro\SupportBundle\Listener\AnswerListener">
+            <argument type="service" id="avro_support.mailer" />
+            <argument type="service" id="security.context" />
+            <tag name="kernel.event_listener" event="avro_support.answer_create" method="create" />
+            <tag name="kernel.event_listener" event="avro_support.answer_created" method="created" />
+        </service>
+
+    </services>
+
+</container>

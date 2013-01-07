@@ -1,0 +1,21 @@
+{% extends 'AvroSupportBundle::layout.html.twig' %}
+{% block support_content %}
+    <div class="page-header">
+        <a class="btn btn-primary btn-large pull-right" data-target="#questionFormModal" href="{{ path('avro_support_question_new') }}"><i class="icon-comment icon-white"></i> Ask <span class="hidden-phone">a Question</a></a>
+        <h1>
+            <span class="hidden-phone">Frequently Asked Questions</span>
+            <span class="visible-phone">FAQ</span>
+        </h1>
+    </div>
+    <div class="center-align">
+        <form method="get" action="{{ path('avro_support_support_search') }}" class="form-horizontal">
+            <div class="input-append">
+                <input id="searchQuery" class="input-xlarge" name="q" value="Search for a question ..." onfocus="this.value=(this.value=='Search for a question ...') ? '' : this.value;" onblur="this.value=(this.value=='') ? 'Search for question ...' : this.value;" type="text">
+                <button class="btn btn-success" type="submit">Search</button>
+            </div>
+        </form>
+    </div>
+    <hr>
+    {% include 'AvroSupportBundle:Support:results.html.twig' %}
+{% endblock %}
+

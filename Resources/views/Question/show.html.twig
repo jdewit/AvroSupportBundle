@@ -1,0 +1,70 @@
+{% extends 'AvroSupportBundle::layout.html.twig' %}
+{% block support_content %}
+    <div class="page-header">
+        <a class="pull-right btn btn-large" href="{{ path('avro_support_question_list') }}"><i class="icon-arrow-left"></i> Back</a>
+        <h1>{{ question.title }}</h1>
+    </div>
+    <div class="row-fluid">
+        <div class="span12">
+            {% if is_granted("ROLE_USER") %}
+                {% if app.user.id == question.authorId or is_granted("ROLE_ADMIN") %}
+                    <div class="pull-right">
+                        <a id="editQuestion" class="btn" href="{{ path('avro_support_question_edit', {'slug': question.slug}) }}"><i class="icon-pencil"></i> Edit</a>
+                        {% if not question.isSolved %}
+                            <a class="btn btn-success" href="{{ path('avro_support_question_close', {'id': question.id}) }}"><i class="icon-ok icon-white"></i> Solved</a>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            {% endif %}
+            <p class="lead">{{ question.body | nl2br }}</p>
+            <p>
+                <span class="muted">Asked by </span><a href="{{ path('avro_support_support_search_user', {'id': question.authorId}) }}">{{ question.authorName }}</a>
+                <span class="muted"> on {{ question.createdAt|date("M jS, Y") }}</span>
+            </p>
+        </div>
+    </div>
+    <hr class="soften">
+    <b>{{ question.answers.count }} Answer{% if question.answers.count > 1 %}s{% endif %}</b>
+    {% if question.categorys|length %}
+        <span id="categoryContainer" class="pull-right">
+            <b>Categories: </b>
+            {% for category in question.categorys %}
+                <a href="{{ path('avro_support_support_search_category', {'slug': category.slug}) }}">{{ category.name }}{% if not loop.last %}, {% endif %}</a>
+            {% endfor %}
+        </span>
+    {% endif %}
+    <hr>
+    <br>
+    {% for answer in question.answers %}
+        <div class="row-fluid">
+            <div class="span1">
+                <img src="http://www.gravatar.com/avatar/{{ answer.authorGravatar }}?s=50&d=mm" />
+            </div>
+            <div class="span11">
+                <a href="{{ path('avro_support_support_search_user', {'id': answer.authorId}) }}">{{ answer.authorName }}</a>
+                <span class="muted"> on {{ answer.createdAt|date("M jS, Y") }}</span>
+                   {% if is_granted("ROLE_USER") %}
+                        {% if app.user.id == answer.authorId or is_granted("ROLE_ADMIN") %}
+                            <a class="btn btn-danger btn-small pull-right confirm" title="Are you sure you want to delete this answer?" href="{{ path('avro_support_question_deleteAnswer', {'questionId': question.id, 'answerId': answer.id}) }}"><i class="icon-remove icon-white"></i> Delete</a>
+                        {% endif %}
+                   {% endif %}
+                <p>{{ answer.body | nl2br }}</p>
+            </div>
+        </div>
+        {% if not loop.last %}
+            <hr class="soften">
+        {% else %}
+            <hr />
+        {% endif %}
+    {% endfor %}
+    {% if is_granted("ROLE_USER") or allow_anon %}
+        <form id="avro_support_answer_form" class="" method="post" action="{{ path('avro_support_question_addAnswer', {'id': question.id}) }}">
+            {{ form_widget(form.body) }}
+            {{ form_widget(form._token) }}
+            <button type="submit" class="btn btn-large btn-primary" title="Submit an answer."><i class="icon-ok icon-white"></i> Submit</button>
+        </form>
+    {% else %}
+        Please <a href="{{ path('fos_user_security_login') }}">login</a> to reply this question.
+    {% endif %}
+{% endblock %}
+

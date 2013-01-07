@@ -1,0 +1,15 @@
+{% extends 'AvroSupportBundle::layout.html.twig' %}
+{% block support_content %}
+    <div class="page-header">
+        <a class="btn btn-large pull-right" href="{{ path('avro_support_support_index') }}"><i class="icon-arrow-left"></i> Back</a>
+        <h1>Ask a Question <p class="lead">We'll answer as soon as we can.</p></h1>
+    </div>
+    {{ form_errors(form) }}
+    <form id="avro_support_question_form" class="orm-horizontal" method="post" action="{{ path('avro_support_question_new') }}" {{ form_enctype(form) }}>
+        {% include 'AvroSupportBundle:Question:form.html.twig' %}
+        <div class="form-actions">
+            <button type="submit" class="btn btn-large btn-primary" title="Create this question."><i class="icon-ok icon-white"></i> Submit</button>
+        </div>
+    </form>
+{% endblock %}
+

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="avro_support.category.form.name">avro_support_category</parameter>
+        <parameter key="avro_support.category.form.type">Avro\SupportBundle\Form\Type\CategoryFormType</parameter>
+    </parameters>
+
+    <services>
+
+        <service id="avro_support.category.form" factory-method="createNamed" factory-service="form.factory" class="Symfony\Component\Form\Form">
+            <argument>%avro_support.category.form.name%</argument>
+            <argument>%avro_support.category.form.type%</argument>
+            <argument>null</argument>
+        </service>
+
+        <service id="avro_support.category.form.type" class="Avro\SupportBundle\Form\Type\CategoryFormType">
+            <tag name="form.type" alias="avro_support_category" />
+            <argument>%avro_support.category.class%</argument>
+        </service>
+
+        <service id="avro_support.category.form.handler" class="Avro\SupportBundle\Form\Handler\CategoryFormHandler" scope="request" >
+            <argument type="service" id="avro_support.category.form" />
+            <argument type="service" id="request" />
+            <argument type="service" id="event_dispatcher" />
+            <argument type="service" id="avro_support.category_manager" />
+        </service>
+
+        <service id ="avro_support.category.listener" class="Avro\SupportBundle\Listener\CategoryListener">
+            <argument type="service" id="avro_support.mailer" />
+            <argument type="service" id="security.context" />
+            <tag name="kernel.event_listener" event="avro_support.category_create" method="create" />
+            <tag name="kernel.event_listener" event="avro_support.category_created" method="created" />
+            <tag name="kernel.event_listener" event="avro_support.category_update" method="update" />
+            <tag name="kernel.event_listener" event="avro_support.category_updated" method="updated" />
+        </service>
+
+    </services>
+
+</container>

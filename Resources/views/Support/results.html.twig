@@ -1,0 +1,27 @@
+<div>
+    {% for question in pagination %}
+        <p class="pull-right muted">
+            <i class="icon-share-alt"></i> {{ question.views }} views<br>
+            <i class="icon-comment"></i> {{ question.answers.count }} answers
+        </p>
+        <h4>
+            <a href="{{ path('avro_support_question_show', {'slug': question.slug}) }}">{{ question.title }}</a>
+
+            <small class="muted"> ({{ question.authorName }})</small>
+        </h4>
+        <div>
+            <p>{{ question.body | truncate('120') }}</p>
+        </div>
+        {% if not loop.last %}
+            <hr class="soften no-margin">
+        {% else %}
+            <hr>
+        {% endif %}
+    {% else %}
+        <p>No questions found.</p>
+    {% endfor %}
+</div>
+<div class="center-align">
+    {{ pagination.render()|raw }}
+</div>
+

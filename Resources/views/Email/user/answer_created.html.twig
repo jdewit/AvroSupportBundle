@@ -1,0 +1,15 @@
+{% block subject %}
+{% autoescape false %}
+{{ 'answer.created.user.subject'|trans({}, 'AvroSupportBundle') }}
+{% endautoescape %}
+{% endblock %}
+{% block body_text %}
+{% autoescape false %}
+{{ 'answer.created.user.message'|trans({
+    '%solvedUrl%': url('avro_support_question_close', {'id': question.id}),
+    '%showUrl%': url('avro_support_question_show', {'slug': question.slug}),
+    '%email_signature%': email_signature,
+    '%name%': question.authorName
+}, 'AvroSupportBundle') }}
+{% endautoescape %}
+{% endblock %}

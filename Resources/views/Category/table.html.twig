@@ -1,0 +1,24 @@
+<table id="category-table" class="styled table-bordered table-condensed table-striped">
+    <thead>
+        <tr>
+            <th>{{ paginator.sortable('Name', 'name')|raw }}</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for category in paginator %}
+            <tr>
+                <td>{{ category.name }}</td>
+                <td><a class="btn" href="{{ path('avro_support_category_edit', {'slug': category.slug}) }}"><i class="icon-pencil"></i> Edit</a></td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="0" class="left-align">0 categorys found.</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<div class="center-align">
+    {{ paginator.render()|raw }}
+</div>
+

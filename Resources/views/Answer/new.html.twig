@@ -1,0 +1,12 @@
+    <form id="avro_support_answer_form" class="modal destroy fade hide" method="post" action="{{ path('avro_support_answer_new', {'id': questionId}) }}">
+        <div class="modal-header">
+            <h3>New Answer</h3>
+        </div>
+        <div class="modal-body">
+            {% include 'AvroSupportBundle:Answer:form.html.twig' %}
+        </div>
+        <div class="modal-footer">
+            <button type="submit" class="btn-large btn-primary pull-right" title="Create this answer."><i class="icon-ok icon-white"></i> Submit</button>
+            <a class="btn btn-large" href="#" data-dismiss="modal"><i class="icon-remove"></i> Close</a>
+        </div>
+    </form>
