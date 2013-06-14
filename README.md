@@ -29,7 +29,7 @@ Enable the bundle in the kernel:
 ``` php
 // app/AppKernel.php
 
-    new Avro\SupportBundle\AvroSupportBundle
+    new Avro\SupportBundle\AvroSupportBundle()
 ```
 
 
