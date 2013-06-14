@@ -9,7 +9,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use JMS\SecurityExtraBundle\Annotation\Secure;
 
 /**
  * Question controller.
@@ -21,7 +20,6 @@ class QuestionController extends controller
 {
     /**
      * @Template()
-     * @Secure("ROLE_USER")
      */
     public function listAction($filter)
     {
@@ -37,7 +35,6 @@ class QuestionController extends controller
 
     /**
      * @Template()
-     * @Secure(roles="ROLE_USER")
      */
     public function newAction()
     {
@@ -92,7 +89,6 @@ class QuestionController extends controller
 
     /**
      * @Template
-     * @Secure(roles="ROLE_USER")
      */
     public function editAction($slug)
     {
