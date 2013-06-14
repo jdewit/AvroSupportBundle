@@ -11,9 +11,15 @@
             "email": "joris.w.dewit@gmail.com"
         }
     ],
+    "repositories": [
+        {
+          "type": "vcs",
+          "url": "git@github.com:jdewit/HTMLPurifierBundle.git"
+        }
+    ],
     "require": {
         "php": ">=5.3.2",
-        "exercise/htmlpurifier-bundle": "dev-master",
+        "exercise/htmlpurifier-bundle": "dev-feature-form-types",
         "knplabs/knp-paginator-bundle": "dev-master"
     },
     "autoload": {
