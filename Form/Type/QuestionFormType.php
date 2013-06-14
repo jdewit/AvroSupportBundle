@@ -62,12 +62,12 @@ class QuestionFormType extends AbstractType
                     'placeholder' => 'Question details. Please provide as much context as possible...'
                 )
             ))
-            ->add('categorys', 'document', array(
-                'label' => 'Categories',
-                'class' => $this->categoryClass,
-                'multiple' => true,
-                'required' => false
-            ))
+            //->add('categorys', 'document', array(
+                //'label' => 'Categories',
+                //'class' => $this->categoryClass,
+                //'multiple' => true,
+                //'required' => false
+            //))
             ->add('isPublic', 'checkbox', array(
                 'label' => 'Show in public questions',
                 'required' => false

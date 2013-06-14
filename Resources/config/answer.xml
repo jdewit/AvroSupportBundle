@@ -22,14 +22,6 @@
             <argument>%avro_support.answer.class%</argument>
         </service>
 
-        <service id="avro_support.answer.form.handler" class="Avro\SupportBundle\Form\Handler\AnswerFormHandler" scope="request" >
-            <argument type="service" id="avro_support.answer.form" />
-            <argument type="service" id="request" />
-            <argument type="service" id="event_dispatcher" />
-            <argument type="service" id="avro_support.answer_manager" />
-            <argument type="service" id="avro_support.question_manager" />
-        </service>
-
         <service id ="avro_support.answer.listener" class="Avro\SupportBundle\Listener\AnswerListener">
             <argument type="service" id="avro_support.mailer" />
             <argument type="service" id="security.context" />

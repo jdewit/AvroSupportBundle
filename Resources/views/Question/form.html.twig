@@ -6,9 +6,9 @@
             {{ form_row(form.authorName) }}
             {{ form_row(form.authorEmail) }}
 {% endif %}
-{{ form_row(form.categorys) }}
-<label for="avro_support_question_isPublic">
-    {{ form_widget(form.isPublic) }}
-    {{ form.isPublic.vars['label'] }}
-</label>
+{#{{ form_row(form.categorys) }}#}
+{#<label for="avro_support_question_isPublic">#}
+    {#{{ form_widget(form.isPublic) }}#}
+    {#{{ form.isPublic.vars['label'] }}#}
+{#</label>#}
 {{ form_widget(form._token) }}

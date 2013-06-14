@@ -6,26 +6,26 @@
 
     <services>
 
-        <service id="avro_support.question_manager" class="Avro\SupportBundle\Document\QuestionManager" scope="request">
-            <argument type="service" id="avro_support.document_manager" />
+        <service id="avro_support.question.manager" class="Avro\SupportBundle\Manager\Doctrine\Document\QuestionManager" scope="request">
+            <argument type="service" id="avro_support.document.manager" />
             <argument type="service" id="request" />
             <argument type="service" id="knp_paginator" />
             <argument>%avro_support.question.class%</argument>
         </service>
 
-        <service id="avro_support.answer_manager" class="Avro\SupportBundle\Document\AnswerManager">
-            <argument type="service" id="avro_support.document_manager" />
+        <service id="avro_support.answer.manager" class="Avro\SupportBundle\Document\AnswerManager">
+            <argument type="service" id="avro_support.document.manager" />
             <argument>%avro_support.answer.class%</argument>
         </service>
 
-        <service id="avro_support.category_manager" class="Avro\SupportBundle\Document\CategoryManager" scope="request">
-            <argument type="service" id="avro_support.document_manager" />
+        <service id="avro_support.category.manager" class="Avro\SupportBundle\Document\CategoryManager" scope="request">
+            <argument type="service" id="avro_support.document.manager" />
             <argument type="service" id="request" />
             <argument type="service" id="knp_paginator" />
             <argument>%avro_support.category.class%</argument>
         </service>
 
-        <service id="avro_support.document_manager" factory-service="doctrine_mongodb" factory-method="getManager" class="Doctrine\ODM\MongoDB\DocumentManager" public="false">
+        <service id="avro_support.document.manager" factory-service="doctrine_mongodb" factory-method="getManager" class="Doctrine\ODM\MongoDB\DocumentManager" public="false">
         </service>
 
     </services>

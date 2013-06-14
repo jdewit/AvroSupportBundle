@@ -22,13 +22,6 @@
             <argument>%avro_support.category.class%</argument>
         </service>
 
-        <service id="avro_support.category.form.handler" class="Avro\SupportBundle\Form\Handler\CategoryFormHandler" scope="request" >
-            <argument type="service" id="avro_support.category.form" />
-            <argument type="service" id="request" />
-            <argument type="service" id="event_dispatcher" />
-            <argument type="service" id="avro_support.category_manager" />
-        </service>
-
         <service id ="avro_support.category.listener" class="Avro\SupportBundle\Listener\CategoryListener">
             <argument type="service" id="avro_support.mailer" />
             <argument type="service" id="security.context" />

@@ -1,5 +1,6 @@
 question:
     created:
+        flash: Question created.
         user:
             subject: We've received your question
             message: |
@@ -22,8 +23,17 @@ question:
                 ---
 
                 %showUrl%
+
+    updated:
+        flash: Question updated.
+    deleted:
+        flash: Question deleted.
+    solved:
+        flash: Question solved.
+
 answer:
     created:
+        flash: Answer created
         user:
             subject: You have received an answer to your question
             message: |
@@ -43,6 +53,5 @@ answer:
 
             message:
 
-    flash:
-        created: Your question has been submitted
-        updated: Your question has been updated
+    updated: 
+        flash: Your question has been updated

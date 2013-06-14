@@ -24,24 +24,13 @@ class SupportController extends Controller
      */
     public function indexAction()
     {
-        $pagination = $this->container->get('avro_support.question_manager')->getFAQ();
+        $faqQuestions = $this->container->get('avro_support.question_manager')->getFAQ();
+
+        $userQuestions = $this->container->get('avro_support.question_manager')->getFAQ();
 
         return array(
-            'pagination' => $pagination,
-        );
-    }
-
-    /**
-     * @Template()
-     * @Cache(smaxage="3600")
-     */
-    public function sideWidgetAction()
-    {
-        $categories = $this->get('avro_support.category_manager')->findAll();
-
-        return array(
-            'categories' => $categories,
-            'supportEmail' => 'sdafsd@fasdfj'
+            'faqQuestions' => $faqQuestions,
+            'userQuestions' => $userQuestions,
         );
     }
 
@@ -62,35 +51,35 @@ class SupportController extends Controller
         );
     }
 
-    /**
-     * Search by category
-     *
-     * @Template()
-     */
-    public function searchByCategoryAction($slug)
-    {
-        $category = $this->container->get('avro_support.category_manager')->findBySlug($slug);
-
-        $pagination = $this->container->get('avro_support.question_manager')->searchByCategory($category->getId());
-
-        return array(
-            'pagination' => $pagination,
-            'category' => $category
-        );
-    }
-
-    /**
-     * Search by user
-     *
-     * @Template()
-     */
-    public function searchByUserAction($id)
-    {
-        $pagination = $this->container->get('avro_support.question_manager')->searchByUser($id);
-
-        return array(
-            'pagination' => $pagination,
-        );
-    }
+//    /**
+//     * Search by category
+//     *
+//     * @Template()
+//     */
+//    public function searchByCategoryAction($slug)
+//    {
+//        $category = $this->container->get('avro_support.category_manager')->findBySlug($slug);
+//
+//        $pagination = $this->container->get('avro_support.question_manager')->searchByCategory($category->getId());
+//
+//        return array(
+//            'pagination' => $pagination,
+//            'category' => $category
+//        );
+//    }
+//
+//    /**
+//     * Search by user
+//     *
+//     * @Template()
+//     */
+//    public function searchByUserAction($id)
+//    {
+//        $pagination = $this->container->get('avro_support.question_manager')->searchByUser($id);
+//
+//        return array(
+//            'pagination' => $pagination,
+//        );
+//    }
 }
 

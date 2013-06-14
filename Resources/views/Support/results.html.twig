@@ -1,5 +1,5 @@
 <div>
-    {% for question in pagination %}
+    {% for question in questions %}
         <p class="pull-right muted">
             <i class="icon-share-alt"></i> {{ question.views }} views<br>
             <i class="icon-comment"></i> {{ question.answers.count }} answers
@@ -22,6 +22,6 @@
     {% endfor %}
 </div>
 <div class="center-align">
-    {#{{ pagination.render()|raw }}#}
+    {{ knp_pagination_render(questions) }}
 </div>
 

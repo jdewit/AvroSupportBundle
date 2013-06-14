@@ -1,13 +1,15 @@
-<table id="question-table" class="styled table-bordered table-condensed table-striped">
+<table id="question-table" class="table-styled table-bordered table-condensed table-striped">
     <thead>
         <tr>
-            <th>{{ paginator.sortable('Title', 'title')|raw }}</th>
-            <th>{{ paginator.sortable('UpdatedAt', 'updatedAt')|raw }}</th>
+            <th>Title</th>
+            <th>Last Updated</th>
+            {#<th>{{ paginator.sortable('Title', 'title')|raw }}</th>#}
+            {#<th>{{ paginator.sortable('UpdatedAt', 'updatedAt')|raw }}</th>#}
             <th></th>
         </tr>
     </thead>
     <tbody>
-        {% for question in paginator %}
+        {% for question in questions %}
             <tr>
                 <td><a href="{{ path('avro_support_question_show', {'slug': question.slug}) }}">{{ question.title }}</a></td>
                 <td class="center-align">{{ question.createdAt|date("F jS, Y") }}</td>
@@ -36,5 +38,5 @@
     </tbody>
 </table>
 <div class="center-align">
-    {{ paginator.render()|raw }}
+    {#{{ paginator.render()|raw }}#}
 </div>

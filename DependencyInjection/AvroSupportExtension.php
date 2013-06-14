@@ -10,8 +10,8 @@ use Symfony\Component\Config\FileLocator;
 
 class AvroSupportExtension extends Extension
 {
-    public function load(array $configs, ContainerBuilder $container) {
-
+    public function load(array $configs, ContainerBuilder $container)
+    {
         $processor = new Processor();
         $configuration = new Configuration();
 

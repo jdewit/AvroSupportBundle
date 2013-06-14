@@ -8,7 +8,6 @@ namespace Avro\SupportBundle\Document;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as ODM;
-use Gedmo\Mapping\Annotation as Gedmo;
 use Avro\SupportBundle\Model\QuestionInterface;
 
 /**
@@ -16,12 +15,6 @@ use Avro\SupportBundle\Model\QuestionInterface;
  */
 abstract class Question implements QuestionInterface
 {
-    /**
-     * @Gedmo\Slug(fields={"title"})
-     * @ODM\String
-     */
-    protected $slug;
-
     /**
      * @ODM\String
      */
@@ -119,17 +112,6 @@ abstract class Question implements QuestionInterface
 	public function setTitle($title) {
 		$this->title = $title;
 	}
-
-    public function getSlug()
-    {
-        return $this->slug;
-    }
-
-    public function setSlug($slug)
-    {
-        $this->slug = $slug;
-        return $this;
-    }
 
     public function getAuthorId()
     {
