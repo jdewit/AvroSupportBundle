@@ -2,13 +2,10 @@
 
 namespace Avro\SupportBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\DependencyInjection\ContainerAware;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Answer;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
-use JMS\SecurityExtraBundle\Annotation\Secure;
 
 
 /**
@@ -16,28 +13,25 @@ use JMS\SecurityExtraBundle\Annotation\Secure;
  *
  * @author Joris de Wit <joris.w.dewit@gmail.com>
  */
-class SupportController extends Controller
+class SupportController extends ContainerAware
 {
     /**
-     * @Template()
-     * @Cache(maxage="3600")
+     * Show support home page
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
         $faqQuestions = $this->container->get('avro_support.question_manager')->getFAQ();
 
         $userQuestions = $this->container->get('avro_support.question_manager')->getFAQ();
 
-        return array(
+		return $this->container->get('templating')->renderResponse('AvroSupportBundle:Support:index.html.twig', array(
             'faqQuestions' => $faqQuestions,
             'userQuestions' => $userQuestions,
-        );
+        ));
     }
 
     /**
-     * Search query
-     *
-     * @Template()
+     * Search for questions
      */
     public function searchAction()
     {
@@ -45,10 +39,10 @@ class SupportController extends Controller
 
         $pagination = $this->container->get('avro_support.question_manager')->search($query);
 
-        return array(
+		return $this->container->get('templating')->renderResponse('AvroSupportBundle:Support:index.html.twig', array(
             'pagination' => $pagination,
             'query' => $query
-        );
+        ));
     }
 
 //    /**

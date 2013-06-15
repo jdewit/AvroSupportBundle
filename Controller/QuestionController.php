@@ -49,7 +49,7 @@ class QuestionController extends ContainerAware
 
                 $request->getSession()->getFlashBag()->set('success', 'question.created.flash');
 
-                return new RedirectResponse($this->container->get('router')->generate('avro_support_question_show', array('slug' => $question->getId())));
+                return new RedirectResponse($this->container->get('router')->generate('avro_support_question_show', array('id' => $question->getId())));
             }
         }
 
@@ -66,7 +66,7 @@ class QuestionController extends ContainerAware
      */
     public function showAction($id)
     {
-        $question = $this->container->get('avro_support.question_manager')->show($slug);
+        $question = $this->container->get('avro_support.question_manager')->show($id);
 
         $form = $this->container->get('avro_support.answer.form');
 
@@ -89,18 +89,18 @@ class QuestionController extends ContainerAware
 
         $questionManager->update($question);
 
-        return new RedirectResponse($this->container->get('router')->generate('avro_support_question_show', array('slug' => $question->getSlug())));
+        return new RedirectResponse($this->container->get('router')->generate('avro_support_question_show', array('id' => $id)));
     }
 
     /**
      * Edit a question
      */
-    public function editAction($slug)
+    public function editAction($id)
     {
-        $question = $this->container->get('avro_support.question_manager')->findBySlug($slug);
+        $question = $this->container->get('avro_support.question_manager')->findBySlug($id);
 
         if (!$question) {
-            $this->container->get('session')->getFlashBag()->set('notice', ' Question not found.');
+            $this->container->get('session')->getFlashBag()->set('notice', 'Question not found.');
 
             return new RedirectResponse($this->container->get('router')->generate('avro_support_question_list'));
         }
@@ -136,7 +136,7 @@ class QuestionController extends ContainerAware
 
         $this->container->get('session')->getFlashBag()->set('success', 'question.solved.flash');
 
-        return new RedirectResponse($this->container->get('router')->generate('avro_support_question_list'), 301);
+        return new RedirectResponse($this->container->get('router')->generate('avro_support_question_list'));
     }
 
     /**
@@ -149,7 +149,7 @@ class QuestionController extends ContainerAware
 
         $this->container->get('session')->getFlashBag()->set('success', 'Question deleted.');
 
-        return new RedirectResponse($this->container->get('router')->generate('avro_support_question_list'), 301);
+        return new RedirectResponse($this->container->get('router')->generate('avro_support_question_list'));
     }
 
     /**
@@ -163,7 +163,7 @@ class QuestionController extends ContainerAware
             $this->container->get('session')->getFlashBag()->set('success', ' Question restored.');
         }
 
-        return new RedirectResponse($this->container->get('router')->generate('avro_support_question_list'), 301);
+        return new RedirectResponse($this->container->get('router')->generate('avro_support_question_list'));
     }
 
     /**
@@ -182,7 +182,7 @@ class QuestionController extends ContainerAware
             $answer = $form->getData();
             $this->container->get('session')->getFlashBag()->set('success', 'Answer added.');
 
-            return new RedirectResponse($this->container->get('router')->generate('avro_support_question_show', array('slug' => $question->getSlug())), 301);
+            return new RedirectResponse($this->container->get('router')->generate('avro_support_question_show', array('id' => $id)));
         }
     }
 
@@ -201,7 +201,7 @@ class QuestionController extends ContainerAware
 
         $this->container->get('session')->getFlashBag()->set('success', 'Answer deleted.');
 
-        return new RedirectResponse($this->container->get('router')->generate('avro_support_question_show', array('slug' => $question->getSlug())), 301);
+        return new RedirectResponse($this->container->get('router')->generate('avro_support_question_show', array('id' => $id)));
     }
 
 

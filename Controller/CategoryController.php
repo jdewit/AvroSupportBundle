@@ -3,24 +3,18 @@
 namespace Avro\SupportBundle\Controller;
 
 use Symfony\Component\DependencyInjection\ContainerAware;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use JMS\SecurityExtraBundle\Annotation\Secure;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Category controller.
  *
  * @author Joris de Wit <joris.w.dewit@gmail.com>
  */
-class CategoryController extends controller
+class CategoryController extends containerAware
 {
     /**
-     * @Template()
-     * @Secure(roles="ROLE_ADMIN")
      */
     public function listAction()
     {
@@ -32,8 +26,6 @@ class CategoryController extends controller
     }
 
     /**
-     * @Template()
-     * @Secure(roles="ROLE_ADMIN")
      */
     public function newAction()
     {
@@ -57,8 +49,6 @@ class CategoryController extends controller
     }
 
     /**
-     * @Secure(roles="ROLE_ADMIN")
-     * @Template
      */
     public function editAction($slug)
     {
@@ -81,7 +71,6 @@ class CategoryController extends controller
     }
 
     /**
-     * @Secure(roles="ROLE_ADMIN")
      */
     public function deleteAction($id)
     {

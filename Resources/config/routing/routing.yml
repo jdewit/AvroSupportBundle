@@ -5,7 +5,7 @@ avro_support_support_search:
     pattern:   /support/search
     defaults:  { _controller: AvroSupportBundle:Support:search }
 avro_support_support_search_category:
-    pattern:   /support/search/category/{slug}
+    pattern:   /support/search/category/{id}
     defaults:  { _controller: AvroSupportBundle:Support:searchByCategory }
 avro_support_support_search_user:
     pattern:   /support/search/user/{id}
@@ -22,10 +22,10 @@ avro_support_question_new:
     pattern:   /support/question/new/
     defaults:  { _controller: AvroSupportBundle:Question:new }
 avro_support_question_show:
-    pattern:   /support/question/show/{slug}
+    pattern:   /support/question/show/{id}
     defaults:  { _controller: AvroSupportBundle:Question:show }
 avro_support_question_edit:
-    pattern:   /support/question/edit/{slug}
+    pattern:   /support/question/edit/{id}
     defaults:  { _controller: AvroSupportBundle:Question:edit }
 avro_support_question_delete:
     pattern:   /support/question/delete/{id}
@@ -50,7 +50,7 @@ avro_support_category_new:
     pattern:   /support/category/new
     defaults:  { _controller: AvroSupportBundle:Category:new }
 avro_support_category_edit:
-    pattern:   /support/category/edit/{slug}
+    pattern:   /support/category/edit/{id}
     defaults:  { _controller: AvroSupportBundle:Category:edit }
 avro_support_category_delete:
     pattern:   /support/category/delete/{id}
