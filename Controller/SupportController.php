@@ -7,7 +7,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
-
 /**
  * Support controller.
  *
@@ -20,9 +19,28 @@ class SupportController extends ContainerAware
      */
     public function indexAction(Request $request)
     {
-        $faqQuestions = $this->container->get('avro_support.question_manager')->getFAQ();
+        $context = $this->container->get('security.context');
+        $paginator = $this->container->get('knp_paginator');
 
-        $userQuestions = $this->container->get('avro_support.question_manager')->getFAQ();
+        $user = $context->getToken()->getUser();
+
+        if (!is_object($user)) {
+            throw new \Exception('No user found');
+        }
+
+        $faqQuery = $this->container->get('avro_support.question.manager')->getFaqQuestionsQuery();
+        $faqQuestions = $paginator->paginate(
+            $faqQuery,
+            $request->query->get('page', 1),
+            20
+        );
+
+        $userQuestionsQuery = $this->container->get('avro_support.question.manager')->getUsersQuestionsQuery($user->getId());
+        $userQuestions = $paginator->paginate(
+            $userQuestionsQuery,
+            $request->query->get('page', 1),
+            20
+        );
 
 		return $this->container->get('templating')->renderResponse('AvroSupportBundle:Support:index.html.twig', array(
             'faqQuestions' => $faqQuestions,
@@ -37,7 +55,7 @@ class SupportController extends ContainerAware
     {
         $query = $this->container->get('request')->query->get('q');
 
-        $pagination = $this->container->get('avro_support.question_manager')->search($query);
+        $pagination = $this->container->get('avro_support.question.manager')->search($query);
 
 		return $this->container->get('templating')->renderResponse('AvroSupportBundle:Support:index.html.twig', array(
             'pagination' => $pagination,
@@ -52,9 +70,9 @@ class SupportController extends ContainerAware
 //     */
 //    public function searchByCategoryAction($slug)
 //    {
-//        $category = $this->container->get('avro_support.category_manager')->findBySlug($slug);
+//        $category = $this->container->get('avro_support.category.manager')->findBySlug($slug);
 //
-//        $pagination = $this->container->get('avro_support.question_manager')->searchByCategory($category->getId());
+//        $pagination = $this->container->get('avro_support.question.manager')->searchByCategory($category->getId());
 //
 //        return array(
 //            'pagination' => $pagination,
@@ -69,7 +87,7 @@ class SupportController extends ContainerAware
 //     */
 //    public function searchByUserAction($id)
 //    {
-//        $pagination = $this->container->get('avro_support.question_manager')->searchByUser($id);
+//        $pagination = $this->container->get('avro_support.question.manager')->searchByUser($id);
 //
 //        return array(
 //            'pagination' => $pagination,

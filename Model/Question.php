@@ -5,12 +5,19 @@ namespace Avro\SupportBundle\Model;
 use Avro\SupportBundle\Model\AnswerInterface;
 use Avro\SupportBundle\Model\CategoryInterface;
 
-class Question
+use Doctrine\Common\Collections\ArrayCollection;
+
+class Question implements QuestionInterface
 {
     public function __construct()
     {
         $this->answers = new ArrayCollection();
         $this->categorys = new ArrayCollection();
+    }
+
+    public function getId()
+    {
+        return $this->id;
     }
 
     public function getTitle()

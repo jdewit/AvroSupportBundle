@@ -1,12 +1,13 @@
 <?php
 
-namespace Avro\SupportBundle\Manager\Doctrine\BaseManager;
+namespace Avro\SupportBundle\Manager\Doctrine;
 
 use Doctrine\Common\Persistence\ObjectManager;
 
 use Knp\Component\Pager\Paginator;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 
 /**
@@ -73,25 +74,16 @@ class BaseManager implements BaseManagerInterface
      */
     protected $repository;
 
-
-    /**
-     * dbDriver
-     *
-     * @var mixed
-     */
-    protected $dbDriver;
-
-    public function __construct(ObjectManager $om, EventDispatcherInterface $dispatcher, SecurityContextInterface $context, $class, $alias, $name, $eventClass, $dbDriver = 'mongodb')
+    public function __construct(ObjectManager $om, Paginator $paginator, EventDispatcherInterface $dispatcher, $class, $alias, $name, $eventClass)
     {
         $this->om = $om;
+        $this->paginator = $paginator;
         $this->dispatcher = $dispatcher;
-        $this->context = $context;
         $this->class = $class;
         $this->alias = $alias;
         $this->name = $name;
         $this->eventClass = $eventClass;
         $this->repository = $om->getRepository($class);
-        $this->dbDriver = $dbDriver;
     }
 
     /**
@@ -127,7 +119,7 @@ class BaseManager implements BaseManagerInterface
 
         $document = new $class();
 
-           $this->dispatcher->dispatch(sprintf('%s.%s.create', $this->alias, $this->name), new $this->eventClass($document));
+        $this->dispatcher->dispatch(sprintf('%s.%s.create', $this->alias, $this->name), new $this->eventClass($document));
 
         return $document;
     }
@@ -145,7 +137,7 @@ class BaseManager implements BaseManagerInterface
             throw new \InvalidArgumentException('Cannot persist a non object');
         }
 
-           $this->dispatcher->dispatch(sprintf('%s.%s.persist', $this->alias, $this->name), new $this->eventClass($document));
+        $this->dispatcher->dispatch(sprintf('%s.%s.persist', $this->alias, $this->name), new $this->eventClass($document));
 
         $document = $this->customize($document);
 
@@ -155,7 +147,7 @@ class BaseManager implements BaseManagerInterface
             $this->flush($andClear);
         }
 
-           $this->dispatcher->dispatch(sprintf('%s.%s.persisted', $this->alias, $this->name), new $this->eventClass($document));
+        $this->dispatcher->dispatch(sprintf('%s.%s.persisted', $this->alias, $this->name), new $this->eventClass($document));
 
         return $document;
     }
@@ -204,6 +196,17 @@ class BaseManager implements BaseManagerInterface
         $this->dispatcher->dispatch(sprintf('%s.%s.deleted', $this->alias, $this->name), new $this->eventClass($document));
 
         return true;
+    }
+
+    /**
+     * Allow override of criteria
+     *
+     * @param array $criteria
+     * @return $criteria
+     */
+    public function filterCriteria(array $criteria)
+    {
+        return $criteria;
     }
 
     /**
@@ -277,6 +280,16 @@ class BaseManager implements BaseManagerInterface
         return $this->repository->findAll();
     }
 
+    /**
+     * Get QueryBuilder
+     *
+     * @return QueryBuilder $queryBuilder
+     */
+    public function getQueryBuilder()
+    {
+        return $this->om->createQueryBuilder($this->getClass());
+    }
+
     /*
      * Paginate a query
      *
@@ -284,12 +297,12 @@ class BaseManager implements BaseManagerInterface
      * @param Request $request
      * @return KnpPaginator
      */
-    public function paginate($query, Request $request)
+    protected function paginate($query, Request $request)
     {
         return $this->paginator->paginate(
             $query,
             $request->query->get('page', 1),
-            10
+            20
         );
     }
 }

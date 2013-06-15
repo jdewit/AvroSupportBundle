@@ -1,14 +1,19 @@
 <?php
-namespace Avro\SupportBundle\Doctrine;
 
-use Doctrine\Common\Persistence\ObjectManager;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\HttpFoundation\Request;
-use Knp\Component\Pager\Paginator;
+namespace Avro\SupportBundle\Manager\Doctrine\Document;
+
 use Avro\SupportBundle\Model\QuestionInterface;
 use Avro\SupportBundle\Model\QuestionManagerInterface;
-
 use Avro\SupportBundle\Manager\Doctrine\BaseManager;
+
+use Doctrine\Common\Persistence\ObjectManager;
+
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+
+use Knp\Component\Pager\Paginator;
+
 
 /*
  * Managing class for Question entity
@@ -18,23 +23,32 @@ use Avro\SupportBundle\Manager\Doctrine\BaseManager;
 class QuestionManager extends BaseManager
 {
 
-    public function __construct($om, $paginator, $class)
+    public function __construct(ObjectManager $om, Paginator $paginator, EventDispatcherInterface $dispatcher, $class)
     {
-        parent::__construct($om, $paginator, $class);
+        parent::__construct(
+            $om,
+            $paginator,
+            $dispatcher,
+            $class,
+            'avro_stripe',
+            'question',
+            'Avro\SupportBundle\Event\QuestionEvent'
+        );
     }
 
-
-
-    public function getFAQ()
+    /**
+     * getFaqQuestionsQuery
+     *
+     * @return Query
+     */
+    public function getFaqQuestionsQuery()
     {
-        $qb = $this->om->createQueryBuilder($this->getClass());
+        $qb = $this->getQueryBuilder();
 
         $qb->field('isPublic')->equals(true);
         $qb->sort('views', 'DESC');
 
-        $query = $qb->getQuery();
-
-        return $this->paginate($query);
+        return $qb->getQuery();
     }
 
     /**
@@ -42,10 +56,11 @@ class QuestionManager extends BaseManager
      *
      * @param string $userId
      * @param string $constraint
+     * @return Query
      */
-    public function getUsersQuestions($userId, $constraint = false)
+    public function getUsersQuestionsQuery($userId, $constraint = false)
     {
-        $qb = $this->om->createQueryBuilder($this->getClass());
+        $qb = $this->getQueryBuilder();
         $qb->field('authorId')->equals($userId);
         $qb->sort('createdAt', 'DESC');
 
@@ -58,9 +73,7 @@ class QuestionManager extends BaseManager
             break;
         }
 
-        $query = $qb->getQuery();
-
-        return $this->paginate($query);
+        return $qb->getQuery();
     }
 
     /**

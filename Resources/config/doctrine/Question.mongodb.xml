@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mongo-mapping xmlns="http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping"
+                        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                        xsi:schemaLocation="http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping
+http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping.xsd">
+
+    <mapped-superclass name="FOS\UserBundle\Document\Group" collection="fos_user_group">
+        <field name="title" fieldName="title" type="string" />
+        <field name="body" fieldName="body" type="string" />
+        <field name="authorId" fieldName="authorId" type="string" />
+        <field name="authorEmail" fieldName="authorEmail" type="string" />
+        <field name="authorName" fieldName="authorName" type="string" />
+        <field name="hasResponse" fieldName="hasResponse" type="boolean" />
+        <field name="isPublic" fieldName="isPublic" type="boolean" />
+        <field name="isSolved" fieldName="isSolved" type="boolean" />
+        <embed-many target-document="Application\SupportBundle\Document\Answer" field="answers" simple="true" />
+        <reference-many target-document="Application\SupportBundle\Document\Category" field="categories" simple="true" />
+
+    /**
+     * @ODM\Boolean
+     */
+    protected $isPublic = true;
+
+    /**
+     * @ODM\Boolean
+     */
+    protected $isSolved = false;
+
+    /**
+     * @ODM\Int
+     */
+    protected $views = 0;
+
+    /**
+     * @ODM\Date
+     */
+    protected $solvedAt;
+
+    /**
+     * @ODM\Date
+     */
+    protected $createdAt;
+
+    /**
+     * @ODM\Date
+     */
+    protected $updatedAt;
+    </mapped-superclass>
+
+</doctrine-mongo-mapping>

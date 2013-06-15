@@ -22,7 +22,7 @@ class QuestionController extends ContainerAware
     {
         $user = $this->container->get('security.context')->getToken()->getUser();
 
-        $paginator = $this->container->get('avro_support.question_manager')->getUsersQuestions($user->getId(), $filter);
+        $paginator = $this->container->get('avro_support.question.manager')->getUsersQuestions($user->getId(), $filter);
 
 		return $this->container->get('templating')->renderResponse('AvroSupportBundle:Question:list.html.twig', array(
             'paginator' => $paginator,
@@ -66,7 +66,7 @@ class QuestionController extends ContainerAware
      */
     public function showAction($id)
     {
-        $question = $this->container->get('avro_support.question_manager')->show($id);
+        $question = $this->container->get('avro_support.question.manager')->show($id);
 
         $form = $this->container->get('avro_support.answer.form');
 
@@ -82,7 +82,7 @@ class QuestionController extends ContainerAware
      */
     public function stopNotificationsAction($id)
     {
-        $questionManager = $this->container->get('avro_support.question_manager');
+        $questionManager = $this->container->get('avro_support.question.manager');
 
         $question = $questionManager->find($id);
         $question->setSendNotification(false);
@@ -97,7 +97,7 @@ class QuestionController extends ContainerAware
      */
     public function editAction($id)
     {
-        $question = $this->container->get('avro_support.question_manager')->findBySlug($id);
+        $question = $this->container->get('avro_support.question.manager')->findBySlug($id);
 
         if (!$question) {
             $this->container->get('session')->getFlashBag()->set('notice', 'Question not found.');
@@ -127,12 +127,12 @@ class QuestionController extends ContainerAware
      */
     public function closeAction($id)
     {
-        $question = $this->container->get('avro_support.question_manager')->find($id);
+        $question = $this->container->get('avro_support.question.manager')->find($id);
 
         $question->setIsSolved(true);
         $question->setSolvedAt(new \Datetime('now'));
 
-        $this->container->get('avro_support.question_manager')->update($question);
+        $this->container->get('avro_support.question.manager')->update($question);
 
         $this->container->get('session')->getFlashBag()->set('success', 'question.solved.flash');
 
@@ -144,8 +144,8 @@ class QuestionController extends ContainerAware
      */
     public function deleteAction($id)
     {
-        $question = $this->container->get('avro_support.question_manager')->find($id);
-        $this->container->get('avro_support.question_manager')->delete($question);
+        $question = $this->container->get('avro_support.question.manager')->find($id);
+        $this->container->get('avro_support.question.manager')->delete($question);
 
         $this->container->get('session')->getFlashBag()->set('success', 'Question deleted.');
 
@@ -157,8 +157,8 @@ class QuestionController extends ContainerAware
     public function restoreAction($id)
     {
         if ($id) {
-            $question = $this->container->get('avro_support.question_manager')->find($id);
-            $this->container->get('avro_support.question_manager')->restore($question);
+            $question = $this->container->get('avro_support.question.manager')->find($id);
+            $this->container->get('avro_support.question.manager')->restore($question);
 
             $this->container->get('session')->getFlashBag()->set('success', ' Question restored.');
         }
@@ -171,7 +171,7 @@ class QuestionController extends ContainerAware
      */
     public function addAnswerAction($id)
     {
-        $question = $this->container->get('avro_support.question_manager')->find($id);
+        $question = $this->container->get('avro_support.question.manager')->find($id);
 
         $form = $this->container->get('avro_support.answer.form');
         $formHandler = $this->container->get('avro_support.answer.form.handler');
@@ -191,7 +191,7 @@ class QuestionController extends ContainerAware
      */
     public function deleteAnswerAction($questionId, $answerId)
     {
-        $questionManager = $this->container->get('avro_support.question_manager');
+        $questionManager = $this->container->get('avro_support.question.manager');
 
         $question = $questionManager->find($questionId);
 

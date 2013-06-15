@@ -13,9 +13,16 @@ use Doctrine\ODM\MongoDB\Mapping\Annotations as ODM;
 
 /**
  * @author Joris de Wit <joris.w.dewit@gmail.com>
+ *
+ * @ODM\Document
  */
 class Question extends BaseQuestion
 {
+    /**
+     * @ODM\Id(strategy="auto")
+     */
+    public $id;
+
     /**
      * @ODM\String
      */

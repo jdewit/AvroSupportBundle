@@ -6,26 +6,25 @@
 
     <services>
 
-        <service id="avro_support.question.manager" class="Avro\SupportBundle\Manager\Doctrine\Document\QuestionManager" scope="request">
-            <argument type="service" id="avro_support.document.manager" />
-            <argument type="service" id="request" />
+        <service id="avro_support.question.manager" class="Avro\SupportBundle\Manager\Doctrine\Document\QuestionManager">
+            <argument type="service" id="doctrine.odm.mongodb.document_manager" />
             <argument type="service" id="knp_paginator" />
+            <argument type="service" id="event_dispatcher" />
             <argument>%avro_support.question.class%</argument>
         </service>
 
-        <service id="avro_support.answer.manager" class="Avro\SupportBundle\Document\AnswerManager">
-            <argument type="service" id="avro_support.document.manager" />
-            <argument>%avro_support.answer.class%</argument>
-        </service>
+        <!--<service id="avro_support.answer.manager" class="Avro\SupportBundle\Manager\Doctrine\Document\AnswerManager">-->
+            <!--<argument type="service" id="avro_support.document.manager" />-->
+            <!--<argument type="service" id="knp_paginator" />-->
+            <!--<argument type="service" id="event_dispatcher" />-->
+            <!--<argument>%avro_support.answer.class%</argument>-->
+        <!--</service>-->
 
-        <service id="avro_support.category.manager" class="Avro\SupportBundle\Document\CategoryManager" scope="request">
-            <argument type="service" id="avro_support.document.manager" />
-            <argument type="service" id="request" />
+        <service id="avro_support.category.manager" class="Avro\SupportBundle\Manager\Doctrine\Document\CategoryManager">
+            <argument type="service" id="doctrine.odm.mongodb.document_manager" />
             <argument type="service" id="knp_paginator" />
+            <argument type="service" id="event_dispatcher" />
             <argument>%avro_support.category.class%</argument>
-        </service>
-
-        <service id="avro_support.document.manager" factory-service="doctrine_mongodb" factory-method="getManager" class="Doctrine\ODM\MongoDB\DocumentManager" public="false">
         </service>
 
     </services>
