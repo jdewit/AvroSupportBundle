@@ -25,12 +25,9 @@
         </service>
 
         <service id ="avro_support.question.listener" class="Avro\SupportBundle\Listener\QuestionListener">
-            <argument type="service" id="avro_support.mailer" />
             <argument type="service" id="security.context" />
-            <tag name="kernel.event_listener" event="avro_support.question_create" method="create" />
-            <tag name="kernel.event_listener" event="avro_support.question_created" method="created" />
-            <tag name="kernel.event_listener" event="avro_support.question_update" method="update" />
-            <tag name="kernel.event_listener" event="avro_support.question_updated" method="updated" />
+            <tag name="kernel.event_listener" event="avro_support.question.persist" method="persist" />
+            <tag name="kernel.event_listener" event="avro_support.question.updated" method="updated" />
         </service>
     </services>
 

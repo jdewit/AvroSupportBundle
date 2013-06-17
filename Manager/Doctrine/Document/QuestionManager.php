@@ -5,6 +5,7 @@ namespace Avro\SupportBundle\Manager\Doctrine\Document;
 use Avro\SupportBundle\Model\QuestionInterface;
 use Avro\SupportBundle\Model\QuestionManagerInterface;
 use Avro\SupportBundle\Manager\Doctrine\BaseManager;
+use Avro\SupportBundle\Event\QuestionEvent;
 
 use Doctrine\Common\Persistence\ObjectManager;
 
@@ -22,7 +23,6 @@ use Knp\Component\Pager\Paginator;
  */
 class QuestionManager extends BaseManager
 {
-
     public function __construct(ObjectManager $om, Paginator $paginator, EventDispatcherInterface $dispatcher, $class)
     {
         parent::__construct(
@@ -30,10 +30,41 @@ class QuestionManager extends BaseManager
             $paginator,
             $dispatcher,
             $class,
-            'avro_stripe',
+            'avro_support',
             'question',
             'Avro\SupportBundle\Event\QuestionEvent'
         );
+    }
+
+    /**
+     * Create a new answer
+     *
+     * @return Answer
+     */
+    public function createAnswer()
+    {
+        $answerClass = 'Avro\SupportBundle\Document\Answer';
+
+        return new $answerClass();
+    }
+
+    /**
+     * Add a new answer
+     *
+     * @param Question $question
+     * @param Answer $answer
+     * @return Question
+     */
+    public function addAnswer($question, $answer)
+    {
+        $this->dispatcher->dispatch('avro_support.question.answer_add', new QuestionEvent($question));
+
+        $question->addAnswer($answer);
+        $this->update($question);
+
+        $this->dispatcher->dispatch('avro_support.question.answer_added', new QuestionEvent($question));
+
+        return $question;
     }
 
     /**
@@ -78,23 +109,27 @@ class QuestionManager extends BaseManager
 
     /**
      * Should be using solr or something but whatever
+     * @param string search query
+     * @return Query
      */
-    public function search($query)
+    public function getSearchQuery($query, $authorId)
     {
         $qb = $this->getQueryBuilder();
-        $qb->field('isPublic')->equals(true);
         $qb->sort('views', 'DESC');
 
         $words = str_replace(array(',', '.'), '', $query);
         $words = explode(' ', $query);
 
+        $qb->addAnd($qb->expr()
+            ->addOr($qb->expr()->field('isPublic')->equals(true))
+            ->addOr($qb->expr()->field('authorId')->equals($authorId))
+        );
+
         foreach($words as $word) {
             $qb->addAnd($qb->expr()->field('body')->equals(new \MongoRegex('/.*'.$word.'.*/i')));
         }
 
-        $query = $qb->getQuery();
-
-        return $this->paginate($query);
+        return $qb->getQuery();
     }
 
     /*

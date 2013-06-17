@@ -10,6 +10,20 @@ namespace Avro\SupportBundle\Model;
  */
 abstract class Answer implements AnswerInterface
 {
+    protected $id;
+    protected $body;
+    protected $authorId;
+    protected $authorName = 'anonymous';
+    protected $authorEmail;
+    protected $isPublic;
+    protected $createdAt;
+    protected $updatedAt;
+
+    public function getId()
+    {
+        return $this->id;
+    }
+
     public function getBody()
     {
         return $this->body;
@@ -42,17 +56,6 @@ abstract class Answer implements AnswerInterface
         return $this;
     }
 
-    public function getAuthorGravatar()
-    {
-        return $this->authorGravatar;
-    }
-
-    public function setAuthorGravatar($authorGravatar)
-    {
-        $this->authorGravatar = $authorGravatar;
-        return $this;
-    }
-
     public function getAuthorEmail()
     {
         return $this->authorEmail;
@@ -63,6 +66,11 @@ abstract class Answer implements AnswerInterface
         $this->authorEmail = $authorEmail;
         return $this;
     }
+
+	public function getGravatar()
+	{
+		return $gravUrl = 'http://www.gravatar.com/avatar/' . md5( strtolower( trim( $this->authorEmail ) ) ) . '?d=mm&s=16&r=PG';
+	}
 
     public function getIsPublic()
     {

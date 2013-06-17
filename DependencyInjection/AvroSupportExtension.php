@@ -20,12 +20,15 @@ class AvroSupportExtension extends Extension
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
 
         $loader->load(sprintf('%s.xml', $config['db_driver']));
-        $loader->load('mailer.xml');
+
+        if (true === $config['send_email']) {
+            $loader->load('mailer.xml');
+        }
+
         $loader->load('answer.xml');
         $loader->load('category.xml');
         $loader->load('question.xml');
 
-        $container->setParameter('avro_support.send_email', $config['send_email']);
         $container->setParameter('avro_support.from_email', $config['from_email']);
         $container->setParameter('avro_support.email_signature', $config['email_signature']);
         $container->setParameter('avro_support.min_role', $config['min_role']);

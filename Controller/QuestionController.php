@@ -18,14 +18,21 @@ class QuestionController extends ContainerAware
     /**
      * List all questions
      */
-    public function listAction($filter)
+    public function listAction(Request $request, $filter)
     {
         $user = $this->container->get('security.context')->getToken()->getUser();
+        $paginator = $this->container->get('knp_paginator');
 
-        $paginator = $this->container->get('avro_support.question.manager')->getUsersQuestions($user->getId(), $filter);
+        $query = $this->container->get('avro_support.question.manager')->getUsersQuestionsQuery($user->getId(), $filter);
+
+        $questions = $paginator->paginate(
+            $query,
+            $request->query->get('page', 1),
+            20
+        );
 
 		return $this->container->get('templating')->renderResponse('AvroSupportBundle:Question:list.html.twig', array(
-            'paginator' => $paginator,
+            'questions' => $questions,
             'filter' => $filter
         ));
     }
@@ -66,7 +73,17 @@ class QuestionController extends ContainerAware
      */
     public function showAction($id)
     {
-        $question = $this->container->get('avro_support.question.manager')->show($id);
+        $questionManager = $this->container->get('avro_support.question.manager');
+        $context = $this->container->get('security.context');
+        $user = $context->getToken()->getUser();
+
+        $question = $questionManager->find($id);
+
+        // increment views
+        if ($user->getId() !== $question->getAuthorId()) {
+            $question->setViews($question->getViews() + 1);
+            $questionManager->update($question);
+        }
 
         $form = $this->container->get('avro_support.answer.form');
 
@@ -95,9 +112,11 @@ class QuestionController extends ContainerAware
     /**
      * Edit a question
      */
-    public function editAction($id)
+    public function editAction(Request $request, $id)
     {
-        $question = $this->container->get('avro_support.question.manager')->findBySlug($id);
+        $questionManager = $this->container->get('avro_support.question.manager');
+
+        $question = $questionManager->find($id);
 
         if (!$question) {
             $this->container->get('session')->getFlashBag()->set('notice', 'Question not found.');
@@ -106,20 +125,24 @@ class QuestionController extends ContainerAware
         }
 
         $form = $this->container->get('avro_support.question.form');
-        $formHandler = $this->container->get('avro_support.question.form.handler');
 
-        $process = $formHandler->process($question);
-        if ($process) {
-            $question = $form->getData('question');
-            $this->container->get('session')->getFlashBag()->set('success', 'question.updated.flash');
+        $form->setData($question);
 
-            return new RedirectResponse($this->container->get('router')->generate('avro_support_question_list'));
+        if ('POST' === $request->getMethod()) {
+            $form->bind($request);
+            if ($form->isValid()) {
+                $questionManager->update($question);
+
+                $this->container->get('session')->getFlashBag()->set('success', 'question.updated.flash');
+
+                return new RedirectResponse($this->container->get('router')->generate('avro_support_question_show', array('id' => $question->getId())));
+            }
         }
 
-        return array(
+		return $this->container->get('templating')->renderResponse('AvroSupportBundle:Question:edit.html.twig', array(
             'form' => $form->createView(),
             'question' => $question,
-        );
+        ));
     }
 
     /**
@@ -169,21 +192,30 @@ class QuestionController extends ContainerAware
     /**
      * Add an answer
      */
-    public function addAnswerAction($id)
+    public function addAnswerAction(Request $request, $id)
     {
-        $question = $this->container->get('avro_support.question.manager')->find($id);
-
+        $questionManager = $this->container->get('avro_support.question.manager');
         $form = $this->container->get('avro_support.answer.form');
-        $formHandler = $this->container->get('avro_support.answer.form.handler');
 
-        $process = $formHandler->process($question);
+        $question = $questionManager->find($id);
+        $answer = $questionManager->createAnswer();
 
-        if ($process) {
-            $answer = $form->getData();
-            $this->container->get('session')->getFlashBag()->set('success', 'Answer added.');
+        $form->setData($answer);
 
-            return new RedirectResponse($this->container->get('router')->generate('avro_support_question_show', array('id' => $id)));
+        if ('POST' === $request->getMethod()) {
+            $form->bind($request);
+
+            if ($form->isValid()) {
+                $answer = $form->getData();
+                $questionManager->addAnswer($question, $answer);
+
+                $request->getSession()->getFlashBag()->set('success', 'Answer added.');
+            } else {
+                $request->getSession()->getFlashBag()->set('danger', 'Unable to add answer. Please try again');
+            }
         }
+
+        return new RedirectResponse($this->container->get('router')->generate('avro_support_question_show', array('id' => $id)));
     }
 
     /**

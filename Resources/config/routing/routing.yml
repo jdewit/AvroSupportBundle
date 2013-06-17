@@ -9,7 +9,7 @@ avro_support_support_search_category:
     defaults:  { _controller: AvroSupportBundle:Support:searchByCategory }
 avro_support_support_search_user:
     pattern:   /support/search/user/{id}
-    defaults:  { _controller: AvroSupportBundle:Support:searchByUser }
+    defaults:  { _controller: AvroSupportBundle:Support:searchByUser, id: false }
 
 avro_support_support_sideWidget:
     pattern:   /support/sideWidget

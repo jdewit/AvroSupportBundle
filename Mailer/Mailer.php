@@ -1,11 +1,16 @@
 <?php
 namespace Avro\SupportBundle\Mailer;
 
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
-use Symfony\Component\Routing\RouterInterface;
-use FOS\UserBundle\Model\UserInterface;
 use Avro\SupportBundle\Model\QuestionInterface;
 use Avro\SupportBundle\Model\AnswerInterface;
+use Avro\SupportBundle\Event\QuestionEvent;
+
+use FOS\UserBundle\Model\UserInterface;
+
+use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
+use Symfony\Component\Routing\RouterInterface;
+
+
 
 /**
  * @author Joris de Wit <joris.w.dewit@gmail.com>
@@ -27,8 +32,10 @@ class Mailer implements MailerInterface
         $this->parameters = $parameters;
     }
 
-    public function sendQuestionCreatedEmail(QuestionInterface $question)
+    public function sendQuestionCreatedEmail(QuestionEvent $event)
     {
+        $question = $event->getQuestion();
+
         if ($question->getAuthorEmail()) {
             // send message to user
             $rendered = $this->templating->render('AvroSupportBundle:Email:user/question_created.html.twig', array(

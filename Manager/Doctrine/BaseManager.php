@@ -119,6 +119,8 @@ class BaseManager implements BaseManagerInterface
 
         $document = new $class();
 
+        $document->setCreatedAt(new \DateTime('now'));
+
         $this->dispatcher->dispatch(sprintf('%s.%s.create', $this->alias, $this->name), new $this->eventClass($document));
 
         return $document;
@@ -167,6 +169,7 @@ class BaseManager implements BaseManagerInterface
 
         $this->dispatcher->dispatch(sprintf('%s.%s.update', $this->alias, $this->name), new $this->eventClass($document));
 
+        $document->setUpdatedAt(new \DateTime('now'));
         $document = $this->customize($document);
 
         $this->om->persist($document);

@@ -5,7 +5,7 @@
             <i class="icon-comment"></i> {{ question.answers.count }} answers
         </p>
         <h4>
-            <a href="{{ path('avro_support_question_show', {'slug': question.slug}) }}">{{ question.title }}</a>
+            <a href="{{ path('avro_support_question_show', {'id': question.id}) }}">{{ question.title }}</a>
 
             <small class="muted"> ({{ question.authorName }})</small>
         </h4>

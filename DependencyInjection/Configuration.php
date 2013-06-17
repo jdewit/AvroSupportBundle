@@ -23,7 +23,7 @@ class Configuration
                 ->scalarNode('db_driver')->defaultValue('mongodb')->cannotBeEmpty()->end()
                 ->scalarNode('email_signature')->cannotBeEmpty()->end()
                 ->scalarNode('redirect_route')->cannotBeEmpty()->end()
-                ->booleanNode('send_email')->defaultTrue()->end()
+                ->booleanNode('send_email')->defaultFalse()->end()
                 ->scalarNode('from_email')->cannotBeEmpty()->end()
                 ->scalarNode('min_role')->defaultValue('ROLE_USER')->end()
                 ->arrayNode('question')

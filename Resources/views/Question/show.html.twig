@@ -9,7 +9,7 @@
             {% if is_granted("ROLE_USER") %}
                 {% if app.user.id == question.authorId or is_granted("ROLE_ADMIN") %}
                     <div class="pull-right">
-                        <a id="editQuestion" class="btn" href="{{ path('avro_support_question_edit', {'slug': question.slug}) }}"><i class="icon-pencil"></i> Edit</a>
+                        <a id="editQuestion" class="btn" href="{{ path('avro_support_question_edit', {'id': question.id}) }}"><i class="icon-pencil"></i> Edit</a>
                         {% if not question.isSolved %}
                             <a class="btn btn-success" href="{{ path('avro_support_question_close', {'id': question.id}) }}"><i class="icon-ok icon-white"></i> Solved</a>
                         {% endif %}
@@ -24,12 +24,12 @@
         </div>
     </div>
     <hr class="soften">
-    <b>{{ question.answers.count }} Answer{% if question.answers.count > 1 %}s{% endif %}</b>
-    {% if question.categorys|length %}
-        <span id="categoryContainer" class="pull-right">
+    <b>{{ question.answers.count }} Answer{% if question.answers.count != 1 %}s{% endif %}</b>
+    {% if question.categories|length %}
+        <span id="categoriesContainer" class="pull-right">
             <b>Categories: </b>
-            {% for category in question.categorys %}
-                <a href="{{ path('avro_support_support_search_category', {'slug': category.slug}) }}">{{ category.name }}{% if not loop.last %}, {% endif %}</a>
+            {% for categories in question.categories %}
+                <a href="{{ path('avro_support_support_search_categories', {'id': categories.id}) }}">{{ categories.name }}{% if not loop.last %}, {% endif %}</a>
             {% endfor %}
         </span>
     {% endif %}
@@ -38,7 +38,7 @@
     {% for answer in question.answers %}
         <div class="row-fluid">
             <div class="span1">
-                <img src="http://www.gravatar.com/avatar/{{ answer.authorGravatar }}?s=50&d=mm" />
+                <img src="http://www.gravatar.com/avatar/{{ answer.authorEmail }}?s=50&d=mm" />
             </div>
             <div class="span11">
                 <a href="{{ path('avro_support_support_search_user', {'id': answer.authorId}) }}">{{ answer.authorName }}</a>

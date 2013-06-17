@@ -6,66 +6,12 @@
 namespace Avro\SupportBundle\Document;
 
 use Doctrine\ODM\MongoDB\Mapping\Annotations as ODM;
-use Gedmo\Mapping\Annotation as Gedmo;
-use Avro\SupportBundle\Model\CategoryInterface;
+use Avro\SupportBundle\Model\Category as BaseCategory;
 
 /**
  * @author Joris de Wit <joris.w.dewit@gmail.com>
  *
  */
-class Category implements CategoryInterface
+class Category extends BaseCategory
 {
-    /**
-     * @Gedmo\Slug(fields={"name"})
-     * @ODM\String
-     */
-    protected $slug;
-
-    /**
-     * @ODM\String
-     */
-    protected $name;
-
-    /**
-     * @ODM\Boolean
-     */
-    protected $isDeleted = false;
-
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    public function setName($name)
-    {
-        $this->name = $name;
-        return $this;
-    }
-
-    public function getSlug()
-    {
-        return $this->slug;
-    }
-
-    public function setSlug($slug)
-    {
-        $this->slug = $slug;
-        return $this;
-    }
-
-    public function getIsDeleted()
-    {
-        return $this->isDeleted;
-    }
-
-    public function setIsDeleted($isDeleted)
-    {
-        $this->isDeleted = $isDeleted;
-        return $this;
-    }
-
-    public function __tostring()
-    {
-        return $this->name;
-    }
 }

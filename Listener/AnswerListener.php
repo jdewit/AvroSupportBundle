@@ -6,11 +6,9 @@ use Avro\SupportBundle\Event\AnswerEvent;
 
 class AnswerListener {
 
-    protected $mailer;
     protected $context;
 
-    public function __construct($mailer, $context) {
-        $this->mailer = $mailer;
+    public function __construct($context) {
         $this->context = $context;
     }
 
@@ -27,14 +25,6 @@ class AnswerListener {
 
         $answer->setCreatedAt(new \DateTime('now'));
     }
-
-    public function created(AnswerEvent $event) {
-        $answer = $event->getAnswer();
-        $question = $event->getQuestion();
-
-        $this->mailer->sendAnswerCreatedEmail($question, $answer);
-    }
-
 
     public function update(AnswerEvent $event) {
         $answer = $event->getAnswer();

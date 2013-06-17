@@ -23,7 +23,6 @@
         </service>
 
         <service id ="avro_support.category.listener" class="Avro\SupportBundle\Listener\CategoryListener">
-            <argument type="service" id="avro_support.mailer" />
             <argument type="service" id="security.context" />
             <tag name="kernel.event_listener" event="avro_support.category_create" method="create" />
             <tag name="kernel.event_listener" event="avro_support.category_created" method="created" />

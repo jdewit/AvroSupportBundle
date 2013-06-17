@@ -6,11 +6,9 @@ use Avro\SupportBundle\Event\CategoryEvent;
 
 class CategoryListener {
 
-    protected $mailer;
     protected $context;
 
-    public function __construct($mailer, $context) {
-        $this->mailer = $mailer;
+    public function __construct($context) {
         $this->context = $context;
     }
 

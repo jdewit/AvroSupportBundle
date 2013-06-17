@@ -4,47 +4,22 @@
                         xsi:schemaLocation="http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping
 http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping.xsd">
 
-    <mapped-superclass name="FOS\UserBundle\Document\Group" collection="fos_user_group">
+    <document name="Avro\SupportBundle\Document\Question" collection="avro_support_question">
+        <field name="id" fieldName="id" id="true" />
         <field name="title" fieldName="title" type="string" />
         <field name="body" fieldName="body" type="string" />
         <field name="authorId" fieldName="authorId" type="string" />
-        <field name="authorEmail" fieldName="authorEmail" type="string" />
         <field name="authorName" fieldName="authorName" type="string" />
+        <field name="authorEmail" fieldName="authorEmail" type="string" />
         <field name="hasResponse" fieldName="hasResponse" type="boolean" />
         <field name="isPublic" fieldName="isPublic" type="boolean" />
         <field name="isSolved" fieldName="isSolved" type="boolean" />
-        <embed-many target-document="Application\SupportBundle\Document\Answer" field="answers" simple="true" />
-        <reference-many target-document="Application\SupportBundle\Document\Category" field="categories" simple="true" />
-
-    /**
-     * @ODM\Boolean
-     */
-    protected $isPublic = true;
-
-    /**
-     * @ODM\Boolean
-     */
-    protected $isSolved = false;
-
-    /**
-     * @ODM\Int
-     */
-    protected $views = 0;
-
-    /**
-     * @ODM\Date
-     */
-    protected $solvedAt;
-
-    /**
-     * @ODM\Date
-     */
-    protected $createdAt;
-
-    /**
-     * @ODM\Date
-     */
-    protected $updatedAt;
-    </mapped-superclass>
+        <field name="views" fieldName="views" type="int" />
+        <field name="solvedAt" fieldName="solvedAt" type="date" />
+        <field name="createdAt" fieldName="createdAt" type="date" />
+        <field name="updatedAt" fieldName="updatedAt" type="date" />
+        <embed-many target-document="Avro\SupportBundle\Document\Answer" field="answers" simple="true" />
+        <reference-many target-document="Avro\SupportBundle\Document\Category" field="categories" simple="true" />
+    </document>
 
 </doctrine-mongo-mapping>

@@ -51,15 +51,26 @@ class SupportController extends ContainerAware
     /**
      * Search for questions
      */
-    public function searchAction()
+    public function searchAction(Request $request)
     {
         $query = $this->container->get('request')->query->get('q');
+        $paginator = $this->container->get('knp_paginator');
+        $context = $this->container->get('security.context');
 
-        $pagination = $this->container->get('avro_support.question.manager')->search($query);
+        $user = $context->getToken()->getUser();
 
-		return $this->container->get('templating')->renderResponse('AvroSupportBundle:Support:index.html.twig', array(
-            'pagination' => $pagination,
-            'query' => $query
+        $searchQuery = $this->container->get('avro_support.question.manager')->getSearchQuery($query, $user->getId());
+
+        $questions = $paginator->paginate(
+            $searchQuery,
+            $request->query->get('page', 1),
+            20
+        );
+
+		return $this->container->get('templating')->renderResponse('AvroSupportBundle:Question:list.html.twig', array(
+            'questions' => $questions,
+            'query' => $query,
+            'filter' => 'search'
         ));
     }
 

@@ -10,6 +10,10 @@ namespace Avro\SupportBundle\Model;
  */
 abstract class Category implements CategoryInterface
 {
+    protected $id;
+    protected $name;
+    protected $isDeleted = false;
+
     public function getId()
     {
         return $this->id;

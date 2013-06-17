@@ -6,15 +6,13 @@ use Avro\SupportBundle\Event\QuestionEvent;
 
 class QuestionListener {
 
-    protected $mailer;
     protected $context;
 
-    public function __construct($mailer, $context) {
-        $this->mailer = $mailer;
+    public function __construct($context) {
         $this->context = $context;
     }
 
-    public function create(QuestionEvent $event) {
+    public function persist(QuestionEvent $event) {
         $question = $event->getQuestion();
 
         if ($this->context->isGranted("ROLE_USER")) {
@@ -22,16 +20,8 @@ class QuestionListener {
             $question->setAuthorId($user->getId());
             $question->setAuthorName($user->getFullName());
             $question->setAuthorEmail($user->getEmail());
-            $question->setAuthorGravatar(md5($user->getEmail()));
         }
 
-        $question->setCreatedAt(new \DateTime('now'));
-    }
-
-    public function created(QuestionEvent $event) {
-        $question = $event->getQuestion();
-
-        $this->mailer->sendQuestionCreatedEmail($question);
     }
 
     public function update(QuestionEvent $event) {

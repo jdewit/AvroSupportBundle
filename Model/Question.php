@@ -9,10 +9,26 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 class Question implements QuestionInterface
 {
+    protected $id;
+    protected $title;
+    protected $body;
+    protected $authorId;
+    protected $authorName = 'anonymous';
+    protected $authorEmail;
+    protected $answers;
+    protected $categories;
+    protected $hasResponse;
+    protected $isPublic = true;
+    protected $isSolved = false;
+    protected $views = 0;
+    protected $solvedAt;
+    protected $createdAt;
+    protected $updatedAt;
+
     public function __construct()
     {
         $this->answers = new ArrayCollection();
-        $this->categorys = new ArrayCollection();
+        $this->categories = new ArrayCollection();
     }
 
     public function getId()
@@ -51,17 +67,6 @@ class Question implements QuestionInterface
         return $this;
     }
 
-    public function getAuthorGravatar()
-    {
-        return $this->authorGravatar;
-    }
-
-    public function setAuthorGravatar($authorGravatar)
-    {
-        $this->authorGravatar = $authorGravatar;
-        return $this;
-    }
-
     public function getAuthorEmail()
     {
         return $this->authorEmail;
@@ -72,6 +77,11 @@ class Question implements QuestionInterface
         $this->authorEmail = $authorEmail;
         return $this;
     }
+
+	public function getGravatar()
+	{
+		return $gravUrl = 'http://www.gravatar.com/avatar/' . md5( strtolower( trim( $this->authorEmail ) ) ) . '?d=mm&s=16&r=PG';
+	}
 
 	public function getBody() {
 			return $this->body;
@@ -145,25 +155,25 @@ class Question implements QuestionInterface
         $this->answers->removeElement($answer);
     }
 
-    public function getCategorys()
+    public function getCategories()
     {
-        return $this->categorys;
+        return $this->categories;
     }
 
-    public function setCategorys($categorys)
+    public function setCategories($categories)
     {
-        $this->categorys = $categorys;
+        $this->categories = $categories;
         return $this;
     }
 
     public function addCategory(CategoryInterface $category)
     {
-        $this->categorys[] = $category;
+        $this->categories[] = $category;
     }
 
     public function removeCategory(CategoryInterface $category)
     {
-        $this->categorys->removeElement($category);
+        $this->categories->removeElement($category);
     }
 
 	public function getCreatedAt() {
