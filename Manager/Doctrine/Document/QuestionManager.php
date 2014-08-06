@@ -126,7 +126,11 @@ class QuestionManager extends BaseManager
         );
 
         foreach($words as $word) {
-            $qb->addAnd($qb->expr()->field('body')->equals(new \MongoRegex('/.*'.$word.'.*/i')));
+            $qb->addAnd($qb->expr()
+                ->addOr($qb->expr()->field('title')->equals(new \MongoRegex('/.*'.$word.'.*/i')))
+                ->addOr($qb->expr()->field('body')->equals(new \MongoRegex('/.*'.$word.'.*/i')))
+            );
+
         }
 
         return $qb->getQuery();

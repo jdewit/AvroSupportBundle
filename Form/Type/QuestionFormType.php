@@ -30,14 +30,14 @@ class QuestionFormType extends AbstractType
                 ->add('authorName', 'purified_text', array(
                     'label' => 'Name',
                     'attr' => array(
-                        'class' => 'pascal input-large',
+                        'class' => 'pascal form-control',
                         'placeholder' => 'Your name...'
                     )
                 ))
                 ->add('authorEmail', 'email', array(
                     'label' => 'Email',
                     'attr' => array(
-                        'class' => 'input-large',
+                        'class' => 'form-control',
                         'placeholder' => 'Your email address...'
                     )
                 ))
@@ -49,7 +49,7 @@ class QuestionFormType extends AbstractType
                 'label' => 'Title',
                 'attr' => array(
                     'title' => 'Enter the title',
-                    'class' => 'title input-max',
+                    'class' => 'title form-control',
                     'placeholder' => 'Question title...'
                 )
             ))
@@ -57,9 +57,9 @@ class QuestionFormType extends AbstractType
                 'label' => 'Question Details',
                 'attr' => array(
                     'title' => 'Enter your message',
-                    'class' => 'title input-max',
+                    'class' => 'title form-control',
                     'style' => 'height: 125px;',
-                    'placeholder' => 'Question details. Please provide as much context as possible...'
+                    'placeholder' => 'Question details. Please provide as much detail as possible...'
                 )
             ))
             //->add('categorys', 'document', array(
