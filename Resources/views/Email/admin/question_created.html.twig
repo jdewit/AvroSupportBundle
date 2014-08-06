@@ -5,7 +5,7 @@
 {% endblock %}
 {% block body_text %}
 {% autoescape false %}
-{{ 'question.created.admin.message'|trans({'%title%': question.title, '%body%': question.body, '%showUrl%': url('avro_support_question_show', {'slug': question.slug}) }, 'AvroSupportBundle') }}
+{{ 'question.created.admin.message'|trans({'%title%': question.title, '%body%': question.body, '%showUrl%': url('avro_support_question_show', {'id': question.id}) }, 'AvroSupportBundle') }}
 {% endautoescape %}
 {% endblock %}
 

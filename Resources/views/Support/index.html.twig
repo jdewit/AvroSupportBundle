@@ -1,13 +1,20 @@
 {% extends 'AvroSupportBundle::layout.html.twig' %}
 {% block support_content %}
+
     <div class="page-header">
-      <a class="btn btn-primary btn-large pull-right" data-target="#questionFormModal" href="{{ path('avro_support_question_new') }}"><i class="icon-comment icon-white"></i> Ask <span class="hidden-phone">a Question</a></a>
+
+      <a class="btn btn-primary btn-large pull-right" data-target="#questionFormModal" href="{{ path('avro_support_question_new') }}"><i class="fa fa-comment"></i> Ask <span class="hidden-phone">a Question</a></a>
+
       <h1>Support <small>We're here to help!</small></h1>
+
     </div>
+
     {% include 'AvroSupportBundle:Support:search_form.html.twig' %}
+
     <hr>
-    <div class="row-fluid">
-        <div class="span6">
+
+    <div class="row">
+        <div class="col-lg-6 col-md-6 col-sm-12">
             <div class="box">
                 <div class="box-header">
                     <h3>Your Questions</h3>
@@ -17,7 +24,7 @@
                 </div>
             </div>
         </div>
-        <div class="span6">
+        <div class="col-lg-6 col-md-6 col-sm-12">
             <div class="box">
                 <div class="box-header">
                     <h3>FAQ</h3>
@@ -28,9 +35,6 @@
             </div>
         </div>
     </div>
-
-
-
 
 {% endblock %}
 

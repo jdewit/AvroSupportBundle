@@ -3,8 +3,8 @@
 {{ form_row(form.body) }}
 
 {% if not is_granted("ROLE_USER") %}
-            {{ form_row(form.authorName) }}
-            {{ form_row(form.authorEmail) }}
+    {{ form_row(form.authorName) }}
+    {{ form_row(form.authorEmail) }}
 {% endif %}
 {#{{ form_row(form.categorys) }}#}
 {#<label for="avro_support_question_isPublic">#}

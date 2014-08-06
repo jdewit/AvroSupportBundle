@@ -7,7 +7,7 @@
 {% autoescape false %}
 {{ 'question.created.user.message'|trans({
     '%name%': question.authorName,
-    '%showUrl%': url('avro_support_question_show', {'slug': question.slug}),
+    '%showUrl%': url('avro_support_question_show', {'id': question.id}),
     '%email_signature%': email_signature
 }, 'AvroSupportBundle') }}
 {% endautoescape %}

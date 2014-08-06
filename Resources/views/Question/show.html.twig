@@ -1,17 +1,20 @@
 {% extends 'AvroSupportBundle::layout.html.twig' %}
 {% block support_content %}
     <div class="page-header">
-        <a class="pull-right btn btn-large" href="{{ path('avro_support_question_list') }}"><i class="icon-arrow-left"></i> Back</a>
+
+        <a class="pull-right btn btn-default btn-large" href="{{ path('avro_support_question_list') }}"><i class="fa fa-arrow-left"></i>Back</a>
+
         <h1>{{ question.title }}</h1>
+
     </div>
     <div class="row-fluid">
         <div class="span12">
             {% if is_granted("ROLE_USER") %}
                 {% if app.user.id == question.authorId or is_granted("ROLE_ADMIN") %}
                     <div class="pull-right">
-                        <a id="editQuestion" class="btn" href="{{ path('avro_support_question_edit', {'id': question.id}) }}"><i class="icon-pencil"></i> Edit</a>
+                        <a id="editQuestion" class="btn btn-default" href="{{ path('avro_support_question_edit', {'id': question.id}) }}"><i class="fa fa-pencil"></i>Edit</a>
                         {% if not question.isSolved %}
-                            <a class="btn btn-success" href="{{ path('avro_support_question_close', {'id': question.id}) }}"><i class="icon-ok icon-white"></i> Solved</a>
+                            <a class="btn btn-success" href="{{ path('avro_support_question_close', {'id': question.id}) }}"><i class="fa fa-check"></i>Solved</a>
                         {% endif %}
                     </div>
                 {% endif %}
@@ -61,7 +64,9 @@
         <form id="avro_support_answer_form" class="" method="post" action="{{ path('avro_support_question_addAnswer', {'id': question.id}) }}">
             {{ form_widget(form.body) }}
             {{ form_widget(form._token) }}
-            <button type="submit" class="btn btn-large btn-primary" title="Submit an answer."><i class="icon-ok icon-white"></i> Submit</button>
+            <br>
+            <br>
+            <button type="submit" class="btn btn-lg btn-primary" title="Submit an answer."><i class="fa fa-check"></i>Submit</button>
         </form>
     {% else %}
         Please <a href="{{ path('fos_user_security_login') }}">login</a> to reply this question.
