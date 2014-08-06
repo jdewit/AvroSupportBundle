@@ -26,6 +26,8 @@ class Configuration
                 ->booleanNode('send_email')->defaultFalse()->end()
                 ->scalarNode('from_email')->cannotBeEmpty()->end()
                 ->scalarNode('min_role')->defaultValue('ROLE_USER')->end()
+                ->scalarNode('mailer_service')->defaultValue('avro_support.mailer')->cannotBeEmpty()->end()
+                ->scalarNode('mailer_provider')->defaultValue('swiftmailer')->cannotBeEmpty()->end()
                 ->arrayNode('question')
                     ->addDefaultsIfNotSet()
                     ->children()

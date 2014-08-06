@@ -2,8 +2,8 @@
 
 namespace Avro\SupportBundle\Mailer;
 
-use Avro\SupportBundle\Model\QuestionInterface;
-use Avro\SupportBundle\Model\AnswerInterface;
+use Avro\SupportBundle\Event\QuestionEvent;
+use Avro\SupportBundle\Event\AnswerEvent;
 
 /**
  * @author Joris de Wit <joris.w.dewit@gmail.com>
@@ -11,8 +11,8 @@ use Avro\SupportBundle\Model\AnswerInterface;
 interface MailerInterface
 {
 
-    public function sendQuestionCreatedEmail(QuestionInterface $question);
+    public function sendQuestionCreatedEmail(QuestionEvent $event);
 
-    public function sendAnswerCreatedEmail(QuestionInterface $question, AnswerInterface $answer);
+    public function sendAnswerCreatedEmail(AnswerEvent $event);
 
 }

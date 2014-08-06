@@ -21,8 +21,8 @@ class AvroSupportExtension extends Extension
 
         $loader->load(sprintf('%s.xml', $config['db_driver']));
 
-        if (true === $config['send_email']) {
-            $loader->load('mailer.xml');
+        if ($config['mailer_service'] == 'avro_support.mailer') {
+            $loader->load($config['mailer_provider'] . '_mailer.xml');
         }
 
         $loader->load('answer.xml');

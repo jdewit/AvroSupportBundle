@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+
+        <service id="avro_support.mailer" class="Avro\SupportBundle\Mailer\SwiftMailer">
+            <argument type="service" id="mailer" />
+            <argument type="service" id="router" />
+            <argument type="service" id="templating" />
+            <argument type="collection">
+                <argument key="from_email">%avro_support.from_email%</argument>
+                <argument key="email_signature">%avro_support.email_signature%</argument>
+            </argument>
+            <tag name="kernel.event_listener" event="avro_support.question.persisted" method="sendQuestionCreatedEmail" />
+        </service>
+
+    </services>
+
+</container>
