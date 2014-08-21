@@ -1,57 +1,68 @@
-question:
-    created:
-        flash: Question created.
-        user:
-            subject: We've received your question
-            message: |
-                Hi %name%
+avro_support:
+    question:
+        created:
+            flash: Question created.
+            email:
+                user:
+                    subject: We've received your question
+                    message: |
+                        Hi %name%
 
-                We have received your question and will respond as soon as possible.
+                        We have received your question and will respond as soon as possible.
 
-                %email_signature%
+                        %email_signature%
 
-                -----------------------------------
-                View Question: %showUrl%
-                -----------------------------------
-        admin:
-            subject: %name% has a question
-            message: |
-                %title%
+                        -----------------------------------
+                        View Question: %showUrl%
+                        -----------------------------------
+                admin:
+                    subject: %name% has a question
+                    message: |
+                        %title%
 
-                %body%
+                        %body%
 
-                ---
+                        ---
 
-                %showUrl%
+                        %showUrl%
 
-    updated:
-        flash: Question updated.
-    deleted:
-        flash: Question deleted.
-    solved:
-        flash: Question solved.
+        updated:
+            flash: Question updated
+        deleted:
+            flash: Question deleted
+        solved:
+            flash: Question solved
 
-answer:
-    created:
-        flash: Answer created
-        user:
-            subject: You have received an answer to your question
-            message: |
-                Hi %name%,
+    answer:
+        created:
+            flash: Answer created
+            email:
+                user:
+                    subject: You have received an answer to your question
+                    message: |
+                        Hi %name%,
 
-                Click the link below to view the answer to your question.
+                        Click the link below to view the answer to your question.
 
-                %showUrl%
-                
-                Please mark your question as solved if this answered your question by clicking the link below.
-                %solvedUrl%
+                        %showUrl%
+                        
+                        Please mark your question as solved if this answered your question by clicking the link below.
+                        %solvedUrl%
 
-                %email_signature%
+                        %email_signature%
 
-        admin:
-            subject:
+                admin:
+                    subject:
 
-            message:
+                    message:
 
-    updated: 
-        flash: Your question has been updated
+        updated: 
+            flash: Your question has been updated
+
+    category:
+        created:
+            flash: Category created
+        updated:
+            flash: Category updated
+        deleted:
+            flash: Category deleted

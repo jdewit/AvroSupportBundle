@@ -29,6 +29,10 @@ class AvroSupportExtension extends Extension
         $loader->load('category.xml');
         $loader->load('question.xml');
 
+        if ($config['flashes_enabled'] == true) {
+            $loader->load('flash.xml');
+        }
+
         $container->setParameter('avro_support.from_email', $config['from_email']);
         $container->setParameter('avro_support.email_signature', $config['email_signature']);
         $container->setParameter('avro_support.min_role', $config['min_role']);

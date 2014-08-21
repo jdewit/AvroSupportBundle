@@ -54,7 +54,7 @@ class QuestionController extends ContainerAware
             if ($form->isValid()) {
                 $questionManager->persist($question);
 
-                $request->getSession()->getFlashBag()->set('success', 'question.created.flash');
+                $request->getSession()->getFlashBag()->set('success', 'avro_support.question.created.flash');
 
                 return new RedirectResponse($this->container->get('router')->generate('avro_support_question_show', array('id' => $question->getId())));
             }
@@ -106,6 +106,8 @@ class QuestionController extends ContainerAware
 
         $questionManager->update($question);
 
+        $this->container->get('session')->getFlashBag()->set('success', 'avro_support.question.updated.flash');
+
         return new RedirectResponse($this->container->get('router')->generate('avro_support_question_show', array('id' => $id)));
     }
 
@@ -118,12 +120,6 @@ class QuestionController extends ContainerAware
 
         $question = $questionManager->find($id);
 
-        if (!$question) {
-            $this->container->get('session')->getFlashBag()->set('notice', 'Question not found.');
-
-            return new RedirectResponse($this->container->get('router')->generate('avro_support_question_list'));
-        }
-
         $form = $this->container->get('avro_support.question.form');
 
         $form->setData($question);
@@ -133,7 +129,7 @@ class QuestionController extends ContainerAware
             if ($form->isValid()) {
                 $questionManager->update($question);
 
-                $this->container->get('session')->getFlashBag()->set('success', 'question.updated.flash');
+                $this->container->get('session')->getFlashBag()->set('success', 'avro_support.question.updated.flash');
 
                 return new RedirectResponse($this->container->get('router')->generate('avro_support_question_show', array('id' => $question->getId())));
             }
@@ -157,7 +153,7 @@ class QuestionController extends ContainerAware
 
         $this->container->get('avro_support.question.manager')->update($question);
 
-        $this->container->get('session')->getFlashBag()->set('success', 'question.solved.flash');
+        $this->container->get('session')->getFlashBag()->set('success', 'avro_support.question.solved.flash');
 
         return new RedirectResponse($this->container->get('router')->generate('avro_support_question_list'));
     }
@@ -170,7 +166,7 @@ class QuestionController extends ContainerAware
         $question = $this->container->get('avro_support.question.manager')->find($id);
         $this->container->get('avro_support.question.manager')->delete($question);
 
-        $this->container->get('session')->getFlashBag()->set('success', 'Question deleted.');
+        $this->container->get('session')->getFlashBag()->set('success', 'avro.support.question.deleted.flash');
 
         return new RedirectResponse($this->container->get('router')->generate('avro_support_question_list'));
     }
@@ -183,7 +179,7 @@ class QuestionController extends ContainerAware
             $question = $this->container->get('avro_support.question.manager')->find($id);
             $this->container->get('avro_support.question.manager')->restore($question);
 
-            $this->container->get('session')->getFlashBag()->set('success', ' Question restored.');
+            $this->container->get('session')->getFlashBag()->set('success', 'avro_support.question.restored.flash');
         }
 
         return new RedirectResponse($this->container->get('router')->generate('avro_support_question_list'));
@@ -209,9 +205,9 @@ class QuestionController extends ContainerAware
                 $answer = $form->getData();
                 $questionManager->addAnswer($question, $answer);
 
-                $request->getSession()->getFlashBag()->set('success', 'Answer added.');
+                $request->getSession()->getFlashBag()->set('success', 'avro_support.answer.added.flash');
             } else {
-                $request->getSession()->getFlashBag()->set('danger', 'Unable to add answer. Please try again');
+                $request->getSession()->getFlashBag()->set('danger', 'avro_support.answer.added_failed.flash');
             }
         }
 
@@ -231,7 +227,7 @@ class QuestionController extends ContainerAware
 
         $questionManager->update($question);
 
-        $this->container->get('session')->getFlashBag()->set('success', 'Answer deleted.');
+        $this->container->get('session')->getFlashBag()->set('success', 'avro_support.answer.deleted.flash');
 
         return new RedirectResponse($this->container->get('router')->generate('avro_support_question_show', array('id' => $id)));
     }

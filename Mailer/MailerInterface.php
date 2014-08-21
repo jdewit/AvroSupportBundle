@@ -13,6 +13,6 @@ interface MailerInterface
 
     public function sendQuestionCreatedEmail(QuestionEvent $event);
 
-    public function sendAnswerCreatedEmail(AnswerEvent $event);
+    public function sendAnswerAddedEmail(AnswerEvent $event);
 
 }

@@ -12,7 +12,7 @@ class AnswerListener {
         $this->context = $context;
     }
 
-    public function create(AnswerEvent $event) {
+    public function add(AnswerEvent $event) {
         $answer = $event->getAnswer();
 
         if ($this->context->isGranted("ROLE_USER")) {
@@ -20,7 +20,6 @@ class AnswerListener {
             $answer->setAuthorId($user->getId());
             $answer->setAuthorName($user->getFullName());
             $answer->setAuthorEmail($user->getEmail());
-            $answer->setAuthorGravatar(md5($user->getEmail()));
         }
 
         $answer->setCreatedAt(new \DateTime('now'));

@@ -33,7 +33,7 @@ class CategoryController extends containerAware
         $formHandler = $this->container->get('avro_support.category.form.handler');
         $process = $formHandler->process();
         if ($process) {
-            $this->get('session')->getFlashBag()->set('success', 'Category created.');
+            $this->get('session')->getFlashBag()->set('success', 'avro_support.category.created.flash');
 
             $category = $form->getData();
 
@@ -59,7 +59,7 @@ class CategoryController extends containerAware
         $process = $formHandler->process($category);
         if ($process) {
             $category = $form->getData('category');
-            $this->container->get('session')->getFlashBag()->set('success', ' Category updated.');
+            $this->container->get('session')->getFlashBag()->set('success', 'avro_support.category.updated.flash');
 
             return new RedirectResponse($this->container->get('router')->generate('avro_support_category_list'));
         }
@@ -79,7 +79,7 @@ class CategoryController extends containerAware
 
         $category = $categoryManager->delete($category);
 
-        $this->container->get('session')->getFlashBag()->set('success', ' Category deleted.');
+        $this->container->get('session')->getFlashBag()->set('success', 'avro_support.category.deleted.flash');
 
         return new RedirectResponse($this->container->get('router')->generate('avro_support_category_list'));
     }

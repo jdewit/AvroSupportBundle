@@ -33,12 +33,12 @@ class BaseMailer implements MailerInterface
         $this->sendEmailMessage($rendered, $this->parameters['from_email'], $this->parameters['from_email']);
     }
 
-    public function sendAnswerCreatedEmail(AnswerEvent $event)
+    public function sendAnswerAddedEmail(AnswerEvent $event)
     {
         $answer = $event->getAnswer();
-        $question = $answer->getQuestion();
+        $question = $event->getQuestion();
 
-        $rendered = $this->templating->render('AvroSupportBundle:Email:user/answer_created.html.twig', array(
+        $rendered = $this->templating->render('AvroSupportBundle:Email:user/answer_added.html.twig', array(
             'answer' => $answer,
             'question' => $question,
             'email_signature' => $this->parameters['email_signature']

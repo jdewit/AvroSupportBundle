@@ -6,6 +6,7 @@ use Avro\SupportBundle\Model\QuestionInterface;
 use Avro\SupportBundle\Model\QuestionManagerInterface;
 use Avro\SupportBundle\Manager\Doctrine\BaseManager;
 use Avro\SupportBundle\Event\QuestionEvent;
+use Avro\SupportBundle\Event\AnswerEvent;
 
 use Doctrine\Common\Persistence\ObjectManager;
 
@@ -57,14 +58,29 @@ class QuestionManager extends BaseManager
      */
     public function addAnswer($question, $answer)
     {
-        $this->dispatcher->dispatch('avro_support.question.answer_add', new QuestionEvent($question));
+        $this->dispatcher->dispatch('avro_support.answer.add', new AnswerEvent($answer, $question));
 
         $question->addAnswer($answer);
         $this->update($question);
 
-        $this->dispatcher->dispatch('avro_support.question.answer_added', new QuestionEvent($question));
+        $this->dispatcher->dispatch('avro_support.answer.added', new AnswerEvent($answer, $question));
 
         return $question;
+    }
+
+    /**
+     * Remove an answer
+     *
+     * @param QuestionInterface $question
+     * @param string $answerId
+     */
+    public function removeAnswer($question, $answerId)
+    {
+        foreach($question->getAnswers() as $answer) {
+            if ($answer->getId() == $answerId) {
+                $question->removeAnswer($answer);
+            }
+        }
     }
 
     /**
@@ -168,21 +184,6 @@ class QuestionManager extends BaseManager
         $query = $qb->getQuery();
 
         return $this->paginate($query);
-    }
-
-    /**
-     * Remove an answer
-     *
-     * @param QuestionInterface $question
-     * @param string $answerId
-     */
-    public function removeAnswer($question, $answerId)
-    {
-        foreach($question->getAnswers() as $answer) {
-            if ($answer->getId() == $answerId) {
-                $question->removeAnswer($answer);
-            }
-        }
     }
 }
 

@@ -15,7 +15,9 @@
                 <argument key="email_signature">%avro_support.email_signature%</argument>
             </argument>
             <tag name="kernel.event_listener" event="avro_support.question.persisted" method="sendQuestionCreatedEmail" />
+            <tag name="kernel.event_listener" event="avro_support.answer.added" method="sendAnswerAddedEmail" />
         </service>
+
 
     </services>
 

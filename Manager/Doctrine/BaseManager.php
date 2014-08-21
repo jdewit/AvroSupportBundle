@@ -254,7 +254,13 @@ class BaseManager implements BaseManagerInterface
         }
         $criteria['id'] = $id;
 
-        return $this->findOneBy($criteria);
+        $result = $this->findOneBy($criteria);
+
+        if (!is_object($result)) {
+            throw new \Exception($this->name . ' not found');
+        }
+
+        return $result;
     }
 
     /**

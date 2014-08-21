@@ -7,8 +7,8 @@
         <h1>{{ question.title }}</h1>
 
     </div>
-    <div class="row-fluid">
-        <div class="span12">
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12">
             {% if is_granted("ROLE_USER") %}
                 {% if app.user.id == question.authorId or is_granted("ROLE_ADMIN") %}
                     <div class="pull-right">
@@ -39,11 +39,11 @@
     <hr>
     <br>
     {% for answer in question.answers %}
-        <div class="row-fluid">
-            <div class="span1">
+        <div class="row">
+            <div class="col-lg-1 col-md-1 col-sm-1">
                 <img src="http://www.gravatar.com/avatar/{{ answer.authorEmail }}?s=50&d=mm" />
             </div>
-            <div class="span11">
+            <div class="col-sm-11 col-md-11 col-lg-11">
                 <a href="{{ path('avro_support_support_search_user', {'id': answer.authorId}) }}">{{ answer.authorName }}</a>
                 <span class="muted"> on {{ answer.createdAt|date("M jS, Y") }}</span>
                    {% if is_granted("ROLE_USER") %}

@@ -24,8 +24,7 @@
 
         <service id ="avro_support.answer.listener" class="Avro\SupportBundle\Listener\AnswerListener">
             <argument type="service" id="security.context" />
-            <tag name="kernel.event_listener" event="avro_support.answer_create" method="create" />
-            <tag name="kernel.event_listener" event="avro_support.answer_created" method="created" />
+            <tag name="kernel.event_listener" event="avro_support.answer.add" method="add" />
         </service>
 
     </services>

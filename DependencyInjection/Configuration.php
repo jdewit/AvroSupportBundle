@@ -24,6 +24,7 @@ class Configuration
                 ->scalarNode('email_signature')->cannotBeEmpty()->end()
                 ->scalarNode('redirect_route')->cannotBeEmpty()->end()
                 ->booleanNode('send_email')->defaultFalse()->end()
+                ->booleanNode('flashes_enabled')->defaultTrue()->end()
                 ->scalarNode('from_email')->cannotBeEmpty()->end()
                 ->scalarNode('min_role')->defaultValue('ROLE_USER')->end()
                 ->scalarNode('mailer_service')->defaultValue('avro_support.mailer')->cannotBeEmpty()->end()
