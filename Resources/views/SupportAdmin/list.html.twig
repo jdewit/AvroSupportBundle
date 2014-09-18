@@ -1,0 +1,23 @@
+{% extends 'AvroSupportBundle::layout.html.twig' %}
+{% block support_content %}
+    <div class="page-header">
+        <a class="btn btn-default btn-large pull-right" href="{{ path('avro_support_support_index') }}"><i class="fa fa-arrow-left"></i> Back To Support Home</a>
+        <h1>
+            Admin Questions List&nbsp;&nbsp;
+            <div class="dropdown btn-group">
+                <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#">{{ filter }}&nbsp;&nbsp;<span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    <li><a href="{{ path('avro_support_admin_list', {'filter': 'Open'}) }}"><i class="fa fa-folder-open-o"></i>Open</a></li>
+                    <li><a href="{{ path('avro_support_admin_list', {'filter': 'Solved'}) }}"><i class="fa fa-check"></i>Solved</a></li>
+                </ul>
+            </div>
+        </h1>
+    </div>
+
+    {% include 'AvroSupportBundle:SupportAdmin:search_form.html.twig' %}
+
+    <div id="questionList" class="row" style="margin-top: 20px;">
+      {% include 'AvroSupportBundle:Question:table.html.twig' %}
+    </div>
+{% endblock %}
+

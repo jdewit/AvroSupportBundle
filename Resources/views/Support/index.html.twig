@@ -2,10 +2,12 @@
 {% block support_content %}
 
     <div class="page-header">
+        <a class="btn btn-primary btn-large pull-right" data-target="#questionFormModal" href="{{ path('avro_support_question_new') }}"><i class="fa fa-comment"></i> Ask a Question</a>
+        {% if is_granted( adminRole ) %}
+            <a class="btn btn-default btn-large pull-right" href="{{ path('avro_support_admin_list') }}"><i class="fa fa-wrench"></i> Admin</a>
+        {% endif %}
 
-      <a class="btn btn-primary btn-large pull-right" data-target="#questionFormModal" href="{{ path('avro_support_question_new') }}"><i class="fa fa-comment"></i> Ask <span class="hidden-phone">a Question</a></a>
-
-      <h1>Support <small>We're here to help!</small></h1>
+    <h1>Support&nbsp;&nbsp;<small>We're here to help!</small></h1>
 
     </div>
 
@@ -17,7 +19,7 @@
         <div class="col-lg-6 col-md-6 col-sm-12">
             <div class="box">
                 <div class="box-header">
-                    <h3>Your Questions</h3>
+                    <h3><a href="{{ path('avro_support_question_list') }}">Your Questions</a></h3>
                 </div>
                 <div class="box-body">
                     {{ include('AvroSupportBundle:Support:results.html.twig', { questions: userQuestions }) }}

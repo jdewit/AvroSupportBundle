@@ -55,7 +55,7 @@ module.exports = function(grunt) {
       watch: {
           support: {
               files: [__dirname + '/**/*'],
-              tasks: ['rsync:support'],
+              tasks: [],
           },
           //support_less: {
               //files: [__dirname + '/Resources/assets/less/**/*.less'],

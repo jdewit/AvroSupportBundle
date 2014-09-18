@@ -45,6 +45,7 @@ class SupportController extends ContainerAware
 		return $this->container->get('templating')->renderResponse('AvroSupportBundle:Support:index.html.twig', array(
             'faqQuestions' => $faqQuestions,
             'userQuestions' => $userQuestions,
+            'adminRole' => $this->container->getParameter('avro_support_admin_role')
         ));
     }
 
@@ -70,7 +71,8 @@ class SupportController extends ContainerAware
 		return $this->container->get('templating')->renderResponse('AvroSupportBundle:Question:list.html.twig', array(
             'questions' => $questions,
             'query' => $query,
-            'filter' => 'search'
+            'filter' => 'search',
+            'adminRole' => $this->container->getParameter('avro_support_admin_role')
         ));
     }
 

@@ -15,6 +15,13 @@ avro_support_support_sideWidget:
     pattern:   /support/sideWidget
     defaults:  { _controller: AvroSupportBundle:Support:sideWidget }
 
+avro_support_admin_list:
+    pattern:   /support/admin/questions/{filter}
+    defaults:  { _controller: AvroSupportBundle:SupportAdmin:list, filter: 'Open' }
+avro_support_admin_search:
+    pattern:   /support/admin/search
+    defaults:  { _controller: AvroSupportBundle:SupportAdmin:search }
+
 avro_support_question_list:
     pattern:   /support/questions/{filter}
     defaults:  { _controller: AvroSupportBundle:Question:list, filter: 'Open' }

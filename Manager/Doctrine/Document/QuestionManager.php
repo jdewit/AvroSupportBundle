@@ -124,8 +124,32 @@ class QuestionManager extends BaseManager
     }
 
     /**
+     * Get all questions (for admin)
+     *
+     * @param string $constraint
+     * @return Query
+     */
+    public function getAllQuestionsQuery($constraint = false)
+    {
+        $qb = $this->getQueryBuilder();
+        $qb->sort('createdAt', 'DESC');
+
+        switch ($constraint) {
+            case 'Open':
+                $qb->field('isSolved')->notEqual(true);
+            break;
+            case 'Solved':
+                $qb->field('isSolved')->equals(true);
+            break;
+        }
+
+        return $qb->getQuery();
+    }
+
+    /**
      * Should be using solr or something but whatever
      * @param string search query
+     * @param string author ID
      * @return Query
      */
     public function getSearchQuery($query, $authorId)
@@ -140,6 +164,30 @@ class QuestionManager extends BaseManager
             ->addOr($qb->expr()->field('isPublic')->equals(true))
             ->addOr($qb->expr()->field('authorId')->equals($authorId))
         );
+
+        foreach($words as $word) {
+            $qb->addAnd($qb->expr()
+                ->addOr($qb->expr()->field('title')->equals(new \MongoRegex('/.*'.$word.'.*/i')))
+                ->addOr($qb->expr()->field('body')->equals(new \MongoRegex('/.*'.$word.'.*/i')))
+            );
+
+        }
+
+        return $qb->getQuery();
+    }
+
+    /**
+     * Get admin search query
+     * @param string search query
+     * @return Query
+     */
+    public function getAdminSearchQuery($query)
+    {
+        $qb = $this->getQueryBuilder();
+        $qb->sort('views', 'DESC');
+
+        $words = str_replace(array(',', '.'), '', $query);
+        $words = explode(' ', $query);
 
         foreach($words as $word) {
             $qb->addAnd($qb->expr()

@@ -27,6 +27,7 @@ class Configuration
                 ->booleanNode('flashes_enabled')->defaultTrue()->end()
                 ->scalarNode('from_email')->cannotBeEmpty()->end()
                 ->scalarNode('min_role')->defaultValue('ROLE_USER')->end()
+                ->scalarNode('admin_role')->defaultValue('ROLE_ADMIN')->end()
                 ->scalarNode('mailer_service')->defaultValue('avro_support.mailer')->cannotBeEmpty()->end()
                 ->scalarNode('mailer_provider')->defaultValue('swiftmailer')->cannotBeEmpty()->end()
                 ->arrayNode('question')
