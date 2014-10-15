@@ -246,7 +246,7 @@ class QuestionController extends ContainerAware
 
         $this->container->get('session')->getFlashBag()->set('success', 'avro_support.answer.deleted.flash');
 
-        return new RedirectResponse($this->container->get('router')->generate('avro_support_question_show', array('id' => $id)));
+        return new RedirectResponse($this->container->get('router')->generate('avro_support_question_show', array('id' => $questionId)));
     }
 
 
