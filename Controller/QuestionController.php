@@ -34,7 +34,7 @@ class QuestionController extends ContainerAware
 		return $this->container->get('templating')->renderResponse('AvroSupportBundle:Question:list.html.twig', array(
             'questions' => $questions,
             'filter' => $filter,
-            'adminRole' => $this->container->getParameter('avro_support_admin_role')
+            'adminRole' => $this->container->getParameter('avro_support.admin_role')
         ));
     }
 
@@ -170,7 +170,7 @@ class QuestionController extends ContainerAware
 
         $this->container->get('avro_support.question.manager')->update($question);
 
-        $this->container->get('session')->getFlashBag()->set('success', 'avro_support.question.solved.flash');
+        $this->container->get('session')->getFlashBag()->set('success', 'avro_support.question.reopened.flash');
 
         return new RedirectResponse($this->container->get('router')->generate('avro_support_question_list'));
     }

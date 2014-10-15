@@ -48,7 +48,7 @@ class AvroSupportExtension extends Extension
         $container->setParameter('avro_support.category.class', $config['category']['class']);
         $container->setParameter('avro_support.category.form.type', $config['category']['form']['name']);
 
-        $container->setParameter('avro_support_admin_role', $config['admin_role']);
+        $container->setParameter('avro_support.admin_role', $config['admin_role']);
 
 
     }
