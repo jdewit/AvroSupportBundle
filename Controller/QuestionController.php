@@ -145,7 +145,7 @@ class QuestionController extends ContainerAware
     /**
      * Close a question
      */
-    public function closeAction($id)
+    public function closeAction(Request $request, $id)
     {
         $question = $this->container->get('avro_support.question.manager')->find($id);
 
@@ -156,13 +156,19 @@ class QuestionController extends ContainerAware
 
         $this->container->get('session')->getFlashBag()->set('success', 'avro_support.question.solved.flash');
 
-        return new RedirectResponse($this->container->get('router')->generate('avro_support_question_list'));
+        $referer = $request->headers->get('referer');
+
+        if (!$referer) {
+            $referer = $this->container->get('router')->generate('avro_support_question_list');
+        }
+        
+        return new RedirectResponse($referer);
     }
 
     /**
      * Reopen a question
      */
-    public function openAction($id)
+    public function openAction(Request $request, $id)
     {
         $question = $this->container->get('avro_support.question.manager')->find($id);
 
@@ -172,7 +178,13 @@ class QuestionController extends ContainerAware
 
         $this->container->get('session')->getFlashBag()->set('success', 'avro_support.question.reopened.flash');
 
-        return new RedirectResponse($this->container->get('router')->generate('avro_support_question_list'));
+        $referer = $request->headers->get('referer');
+
+        if (!$referer) {
+            $referer = $this->container->get('router')->generate('avro_support_question_list');
+        }
+        
+        return new RedirectResponse($referer);
     }
 
     /**
