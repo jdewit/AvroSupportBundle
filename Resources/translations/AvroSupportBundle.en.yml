@@ -32,10 +32,12 @@ avro_support:
             flash: Question deleted
         solved:
             flash: Question solved
+        reopened:
+            flash: Question reopened
 
     answer:
-        created:
-            flash: Answer created
+        added:
+            flash: Answer added
             email:
                 user:
                     subject: You have received an answer to your question
@@ -56,8 +58,12 @@ avro_support:
 
                     message:
 
-        updated: 
-            flash: Your question has been updated
+        add_failed:
+            flash: Answer could not be added
+        updated:
+            flash: Answer updated
+        deleted:
+            flash: Answer deleted
 
     category:
         created:

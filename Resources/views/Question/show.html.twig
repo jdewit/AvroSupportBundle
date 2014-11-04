@@ -2,7 +2,11 @@
 {% block support_content %}
     <div class="page-header">
 
+        {% if admin is defined %}
+        <a class="pull-right btn btn-default btn-large" href="{{ path('avro_support_admin_list') }}"><i class="fa fa-fast-backward"></i> Back to Questions</a>
+        {% else %}
         <a class="pull-right btn btn-default btn-large" href="{{ path('avro_support_question_list') }}"><i class="fa fa-fast-backward"></i> Back to Questions</a>
+        {% endif %}
         <a class="pull-right btn btn-default btn-large" href="javascript:history.go(-1);"><i class="fa fa-arrow-left"></i> Back</a>
 
         <h1>{{ question.title }}</h1>

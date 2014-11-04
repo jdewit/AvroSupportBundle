@@ -21,6 +21,9 @@ avro_support_admin_list:
 avro_support_admin_search:
     pattern:   /support/admin/search
     defaults:  { _controller: AvroSupportBundle:SupportAdmin:search }
+avro_support_admin_question_show:
+    pattern:   /support/admin/question/show/{id}
+    defaults:  { _controller: AvroSupportBundle:Question:show }
 
 avro_support_question_list:
     pattern:   /support/questions/{filter}

@@ -17,7 +17,7 @@
     {% include 'AvroSupportBundle:SupportAdmin:search_form.html.twig' %}
 
     <div id="questionList" class="row" style="margin-top: 20px;">
-      {% include 'AvroSupportBundle:Question:table.html.twig' %}
+      {% include 'AvroSupportBundle:Question:table.html.twig' with { 'adminArea': true } %}
     </div>
 {% endblock %}
 

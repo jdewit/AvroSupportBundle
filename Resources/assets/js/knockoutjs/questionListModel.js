@@ -131,7 +131,7 @@ function questionListModel(options) {
     self.batchRestore = function(data, event) {
         var checked = $('input.selector:checked');
         if (checked.length) {
-            if (confirm("Are you sure you want to restore these  questions?")) {
+            if (confirm("Are you sure you want to restore these questions?")) {
                 href = event.currentTarget.href; 
                 avro.ajax({
                     url: href,

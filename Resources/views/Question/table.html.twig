@@ -11,11 +11,21 @@
     <tbody>
         {% for question in questions %}
             <tr>
-                <td><a href="{{ path('avro_support_question_show', {'id': question.id}) }}">{{ question.title }}</a></td>
+                <td>
+                    {% if adminArea is defined %}
+                    <a href="{{ path('avro_support_admin_question_show', {'id': question.id, 'admin': true}) }}">{{ question.title }}</a>
+                    {% else %}
+                    <a href="{{ path('avro_support_question_show', {'id': question.id}) }}">{{ question.title }}</a>
+                    {% endif %}
+                </td>
                 <td class="center-align">{{ question.createdAt|date("F jS, Y") }}</td>
                 <td>
                     <div class="dropdown btn-group">
+                        {% if adminArea is defined %}
+                        <a href="{{ path('avro_support_admin_question_show', {'id':question.id, 'admin': true}) }}" class="btn btn-default"><i class="fa fa-eye"></i> View</a>
+                        {% else %}
                         <a href="{{ path('avro_support_question_show', {'id':question.id}) }}" class="btn btn-default"><i class="fa fa-eye"></i> View</a>
+                        {% endif %}
                         <button class="btn btn-default dropdown-toggle" data-toggle="dropdown"> <span class="caret"></span></button>
                         <ul class="dropdown-menu">
                             <li><a id="editQuestion" href="{{ path('avro_support_question_edit', {'id': question.id}) }}"><i class="fa fa-pencil"></i> Edit</a></li>

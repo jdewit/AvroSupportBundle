@@ -31,9 +31,13 @@ class CategoryController extends containerAware
     {
         $form = $this->container->get('avro_support.category.form');
         $formHandler = $this->container->get('avro_support.category.form.handler');
+
         $process = $formHandler->process();
         if ($process) {
+            $translator = $this->container->get('translator');
+
             $this->get('session')->getFlashBag()->set('success', 'avro_support.category.created.flash');
+            $this->container->get('session')->getFlashBag()->set('success', $translator->trans('avro_support.category.created.flash', array(), 'AvroSupportBundle'));
 
             $category = $form->getData();
 
@@ -59,7 +63,9 @@ class CategoryController extends containerAware
         $process = $formHandler->process($category);
         if ($process) {
             $category = $form->getData('category');
-            $this->container->get('session')->getFlashBag()->set('success', 'avro_support.category.updated.flash');
+            $translator = $this->container->get('translator');
+
+            $this->container->get('session')->getFlashBag()->set('success', $translator->trans('avro_support.category.updated.flash', array(), 'AvroSupportBundle'));
 
             return new RedirectResponse($this->container->get('router')->generate('avro_support_category_list'));
         }
@@ -75,11 +81,12 @@ class CategoryController extends containerAware
     public function deleteAction($id)
     {
         $categoryManager = $this->container->get('avro_support.category_manager');
+        $translator = $this->container->get('translator');
         $category = $categoryManager->find($id);
 
         $category = $categoryManager->delete($category);
 
-        $this->container->get('session')->getFlashBag()->set('success', 'avro_support.category.deleted.flash');
+        $this->container->get('session')->getFlashBag()->set('success', $translator->trans('avro_support.category.deleted.flash', array(), 'AvroSupportBundle'));
 
         return new RedirectResponse($this->container->get('router')->generate('avro_support_category_list'));
     }
