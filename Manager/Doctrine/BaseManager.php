@@ -235,7 +235,7 @@ class BaseManager implements BaseManagerInterface
         $document = $this->repository->findOneBy($criteria);
 
         if (!is_object($document)) {
-            throw new FlashException('notice', sprintf('Error finding %s. Please try again.', $this->name));
+            throw new \Exception(sprintf('Error finding %s. Please try again.', $this->name));
         }
 
         return $document;

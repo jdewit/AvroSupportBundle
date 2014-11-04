@@ -22,10 +22,12 @@
             <argument type="service" id="security.context" />
             <argument>%avro_support.question.class%</argument>
             <argument>%avro_support.category.class%</argument>
+            <argument>%avro_support.min_role%</argument>
         </service>
 
         <service id ="avro_support.question.listener" class="Avro\SupportBundle\Listener\QuestionListener">
             <argument type="service" id="security.context" />
+            <argument>%avro_support.min_role%</argument>
             <tag name="kernel.event_listener" event="avro_support.question.persist" method="persist" />
             <tag name="kernel.event_listener" event="avro_support.question.updated" method="updated" />
         </service>

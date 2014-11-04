@@ -1,23 +1,23 @@
 {% extends 'AvroSupportBundle::layout.html.twig' %}
 {% block support_content %}
     <div class="page-header">
-
-        {% if admin is defined %}
-        <a class="pull-right btn btn-default btn-large" href="{{ path('avro_support_admin_list') }}"><i class="fa fa-fast-backward"></i> Back to Questions</a>
+        {% if admin is same as(true) %}
+        <a class="pull-right btn btn-default btn-large" href="{{ path('avro_support_admin_list') }}"><i class="fa fa-arrow-left"></i> Back</a>
         {% else %}
-        <a class="pull-right btn btn-default btn-large" href="{{ path('avro_support_question_list') }}"><i class="fa fa-fast-backward"></i> Back to Questions</a>
+        <a class="pull-right btn btn-default btn-large" href="{{ path('avro_support_question_list') }}"><i class="fa fa-arrow-left"></i> Back</a>
         {% endif %}
-        <a class="pull-right btn btn-default btn-large" href="javascript:history.go(-1);"><i class="fa fa-arrow-left"></i> Back</a>
-
         <h1>{{ question.title }}</h1>
-
     </div>
     <div class="row">
         <div class="col-lg-12 col-md-12 col-sm-12">
-            {% if is_granted("ROLE_USER") %}
-                {% if app.user.id == question.authorId or is_granted("ROLE_ADMIN") %}
+            {% if is_granted(minRole) %}
+                {% if app.user.id == question.authorId or is_granted(adminRole) %}
                     <div class="pull-right">
-                        <a id="editQuestion" class="btn btn-default" href="{{ path('avro_support_question_edit', {'id': question.id}) }}"><i class="fa fa-pencil"></i> Edit</a>
+                        {% if admin is same as(true) %}
+                        <a id="editQuestion" class="btn btn-default" href="{{ path('avro_support_question_edit', {'id': question.id, 'admin': 'true', 'backToQuestion': 'true'}) }}"><i class="fa fa-pencil"></i> Edit</a>
+                        {% else %}
+                        <a id="editQuestion" class="btn btn-default" href="{{ path('avro_support_question_edit', {'id': question.id, 'backToQuestion': 'true'}) }}"><i class="fa fa-pencil"></i> Edit</a>
+                        {% endif %}
                         {% if not question.isSolved %}
                             <a class="btn btn-success" href="{{ path('avro_support_question_close', {'id': question.id}) }}"><i class="fa fa-check"></i> Solved</a>
                         {% endif %}
@@ -54,8 +54,8 @@
             <div class="col-sm-11 col-md-11 col-lg-11">
                 <a href="{{ path('avro_support_support_search_user', {'id': answer.authorId}) }}">{{ answer.authorName }}</a>
                 <span class="muted"> on {{ answer.createdAt|date("M jS, Y") }}</span>
-                   {% if is_granted("ROLE_USER") %}
-                        {% if app.user.id == answer.authorId or is_granted("ROLE_ADMIN") %}
+                   {% if is_granted(minRole) %}
+                        {% if app.user.id == answer.authorId or is_granted(adminRole) %}
                             <a class="btn btn-danger btn-small pull-right confirm" title="Are you sure you want to delete this answer?" href="{{ path('avro_support_question_deleteAnswer', {'questionId': question.id, 'answerId': answer.id}) }}"><i class="fa fa-times"></i> Delete</a>
                         {% endif %}
                    {% endif %}
@@ -68,7 +68,7 @@
             <hr />
         {% endif %}
     {% endfor %}
-    {% if is_granted("ROLE_USER") or allow_anon %}
+    {% if is_granted(minRole) or allow_anon %}
         <form id="avro_support_answer_form" class="" method="post" action="{{ path('avro_support_question_addAnswer', {'id': question.id}) }}">
             {{ form_widget(form.body) }}
             {{ form_widget(form._token) }}

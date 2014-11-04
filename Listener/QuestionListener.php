@@ -7,15 +7,17 @@ use Avro\SupportBundle\Event\QuestionEvent;
 class QuestionListener {
 
     protected $context;
+    protected $minRole;
 
-    public function __construct($context) {
+    public function __construct($context, $minRole) {
         $this->context = $context;
+        $this->minRole = $minRole;
     }
 
     public function persist(QuestionEvent $event) {
         $question = $event->getQuestion();
 
-        if ($this->context->isGranted("ROLE_USER")) {
+        if ($this->context->isGranted($this->minRole)) {
             $user = $this->context->getToken()->getUser();
             $question->setAuthorId($user->getId());
             $question->setAuthorName($user->getFullName());

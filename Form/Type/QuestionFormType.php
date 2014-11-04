@@ -15,17 +15,19 @@ class QuestionFormType extends AbstractType
     protected $context;
     protected $class;
     protected $categoryClass;
+    protected $minRole;
 
-    public function __construct($context, $class, $categoryClass)
+    public function __construct($context, $class, $categoryClass, $minRole)
     {
         $this->context = $context;
         $this->class = $class;
         $this->categoryClass = $categoryClass;
+        $this->minRole = $minRole;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        if (!$this->context->isGranted("ROLE_USER")) {
+        if (!$this->context->isGranted($this->minRole)) {
            $builder
                 ->add('authorName', 'purified_text', array(
                     'label' => 'Name',

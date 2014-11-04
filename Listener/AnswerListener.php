@@ -7,15 +7,17 @@ use Avro\SupportBundle\Event\AnswerEvent;
 class AnswerListener {
 
     protected $context;
+    protected $minRole;
 
-    public function __construct($context) {
+    public function __construct($context, $minRole) {
         $this->context = $context;
+        $this->minRole = $minRole;
     }
 
     public function add(AnswerEvent $event) {
         $answer = $event->getAnswer();
 
-        if ($this->context->isGranted("ROLE_USER")) {
+        if ($this->context->isGranted($this->minRole)) {
             $user = $this->context->getToken()->getUser();
             $answer->setAuthorId($user->getId());
             $answer->setAuthorName($user->getFullName());

@@ -2,7 +2,7 @@
 {{ form_row(form.title) }}
 {{ form_row(form.body) }}
 
-{% if not is_granted("ROLE_USER") %}
+{% if not is_granted(minRole) %}
     {{ form_row(form.authorName) }}
     {{ form_row(form.authorEmail) }}
 {% endif %}

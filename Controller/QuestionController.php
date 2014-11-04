@@ -34,6 +34,7 @@ class QuestionController extends ContainerAware
 		return $this->container->get('templating')->renderResponse('AvroSupportBundle:Question:list.html.twig', array(
             'questions' => $questions,
             'filter' => $filter,
+            'minRole' => $this->container->getParameter('avro_support.min_role'),
             'adminRole' => $this->container->getParameter('avro_support.admin_role')
         ));
     }
@@ -62,18 +63,16 @@ class QuestionController extends ContainerAware
             }
         }
 
-        $isUser = $this->container->get('security.context')->isGranted($this->container->getParameter('avro_support.min_role'));
-
 		return $this->container->get('templating')->renderResponse('AvroSupportBundle:Question:new.html.twig', array(
             'form' => $form->createView(),
-            'isUser' => $isUser
+            'minRole' => $this->container->getParameter('avro_support.min_role')
         ));
     }
 
     /**
      * Show a question
      */
-    public function showAction($id, $admin = false)
+    public function showAction(Request $request, $id)
     {
         $questionManager = $this->container->get('avro_support.question.manager');
         $context = $this->container->get('security.context');
@@ -93,14 +92,16 @@ class QuestionController extends ContainerAware
             'question' => $question,
             'form' => $form->createView(),
             'allow_anon' => $this->container->getParameter('avro_support.question.allow_anon'),
-            'admin' => $admin
+            'adminRole' => $this->container->getParameter('avro_support.admin_role'),
+            'minRole' => $this->container->getParameter('avro_support.min_role'),
+            'admin' => $request->query->get('admin') === 'true' ? true : false
         ));
     }
 
     /**
      * Stop notifications on a question
      */
-    public function stopNotificationsAction($id)
+    public function stopNotificationsAction(Request $request, $id)
     {
         $questionManager = $this->container->get('avro_support.question.manager');
         $translator = $this->container->get('translator');
@@ -112,7 +113,13 @@ class QuestionController extends ContainerAware
 
         $this->container->get('session')->getFlashBag()->set('success', $translator->trans('avro_support.question.updated.flash', array(), 'AvroSupportBundle'));
 
-        return new RedirectResponse($this->container->get('router')->generate('avro_support_question_show', array('id' => $id)));
+        $referer = $request->headers->get('referer');
+
+        if (!$referer) {
+            $referer = $this->container->get('router')->generate('avro_support_question_show', array('id' => $id));
+        }
+
+        return new RedirectResponse($referer);
     }
 
     /**
@@ -136,13 +143,25 @@ class QuestionController extends ContainerAware
 
                 $this->container->get('session')->getFlashBag()->set('success', $translator->trans('avro_support.question.updated.flash', array(), 'AvroSupportBundle'));
 
-                return new RedirectResponse($this->container->get('router')->generate('avro_support_question_show', array('id' => $question->getId())));
+                $referer = $request->headers->get('referer');
+                $destination = $this->container->get('router')->generate('avro_support_question_show', array('id' => $question->getId()));
+
+                if ($referer) {
+                    if (strpos($referer, 'admin') !== false) {
+                        $destination = $this->container->get('router')->generate('avro_support_question_show', array('id' => $question->getId(), 'admin' => true));
+                    }
+                }
+
+                return new RedirectResponse($destination);
             }
         }
 
 		return $this->container->get('templating')->renderResponse('AvroSupportBundle:Question:edit.html.twig', array(
             'form' => $form->createView(),
             'question' => $question,
+            'minRole' => $this->container->getParameter('avro_support.min_role'),
+            'admin' => $request->query->get('admin') === 'true' ? true : false,
+            'backToQuestion' => $request->query->get('backToQuestion') === 'true' ? true : false
         ));
     }
 
@@ -162,12 +181,15 @@ class QuestionController extends ContainerAware
         $this->container->get('session')->getFlashBag()->set('success', $translator->trans('avro_support.question.solved.flash', array(), 'AvroSupportBundle'));
 
         $referer = $request->headers->get('referer');
+        $destination = $this->container->get('router')->generate('avro_support_question_list');
 
-        if (!$referer) {
-            $referer = $this->container->get('router')->generate('avro_support_question_list');
+        if ($referer) {
+            if (strpos($referer, 'admin') !== false) {
+                $destination = $this->container->get('router')->generate('avro_support_admin_list');
+            }
         }
-        
-        return new RedirectResponse($referer);
+
+        return new RedirectResponse($destination);
     }
 
     /**
@@ -185,12 +207,15 @@ class QuestionController extends ContainerAware
         $this->container->get('session')->getFlashBag()->set('success', $translator->trans('avro_support.question.reopened.flash', array(), 'AvroSupportBundle'));
 
         $referer = $request->headers->get('referer');
+        $destination = $this->container->get('router')->generate('avro_support_question_list');
 
-        if (!$referer) {
-            $referer = $this->container->get('router')->generate('avro_support_question_list');
+        if ($referer) {
+            if (strpos($referer, 'admin') !== false) {
+                $destination = $this->container->get('router')->generate('avro_support_admin_list');
+            }
         }
-        
-        return new RedirectResponse($referer);
+
+        return new RedirectResponse($destination);
     }
 
     /**
@@ -206,15 +231,19 @@ class QuestionController extends ContainerAware
         $this->container->get('session')->getFlashBag()->set('success', $translator->trans('avro_support.question.deleted.flash', array(), 'AvroSupportBundle'));
 
         $referer = $request->headers->get('referer');
+        $destination = $this->container->get('router')->generate('avro_support_question_list');
 
-        if (!$referer) {
-            $referer = $this->container->get('router')->generate('avro_support_question_list');
+        if ($referer) {
+            if (strpos($referer, 'admin') !== false) {
+                $destination = $this->container->get('router')->generate('avro_support_admin_list');
+            }
         }
 
-        return new RedirectResponse($referer);
+        return new RedirectResponse($destination);
     }
 
     /**
+     * -- INCOMPLETE AND UNUSED --
      */
     public function restoreAction(Request $request, $id)
     {
@@ -264,12 +293,15 @@ class QuestionController extends ContainerAware
         }
 
         $referer = $request->headers->get('referer');
+        $destination = $this->container->get('router')->generate('avro_support_question_show', array('id' => $question->getId()));
 
-        if (!$referer) {
-            $referer = $this->container->get('router')->generate('avro_support_question_show', array('id' => $questionId));
+        if ($referer) {
+            if (strpos($referer, 'admin') !== false) {
+                $destination = $this->container->get('router')->generate('avro_support_question_show', array('id' => $question->getId(), 'admin' => true));
+            }
         }
 
-        return new RedirectResponse($referer);
+        return new RedirectResponse($destination);
     }
 
     /**
@@ -289,12 +321,15 @@ class QuestionController extends ContainerAware
         $this->container->get('session')->getFlashBag()->set('success', $translator->trans('avro_support.answer.deleted.flash', array(), 'AvroSupportBundle'));
 
         $referer = $request->headers->get('referer');
+        $destination = $this->container->get('router')->generate('avro_support_question_show', array('id' => $question->getId()));
 
-        if (!$referer) {
-            $referer = $this->container->get('router')->generate('avro_support_question_show', array('id' => $questionId));
+        if ($referer) {
+            if (strpos($referer, 'admin') !== false) {
+                $destination = $this->container->get('router')->generate('avro_support_question_show', array('id' => $question->getId(), 'admin' => true));
+            }
         }
 
-        return new RedirectResponse($referer);
+        return new RedirectResponse($destination);
     }
 
 
