@@ -2,17 +2,17 @@
 {% block support_content %}
 
     <div class="page-header">
-      {% if backToQuestion is same as(true) %}
-        {% if admin is same as(true) %}
-          <a class="btn btn-default pull-right" href="{{ path('avro_support_question_show', {'id': question.id, 'admin': 'true'}) }}"><i class="fa fa-arrow-left"></i> Back</a>
+      {% if backToQuestion %}
+        {% if admin %}
+          <a class="btn btn-default btn-lg pull-right" href="{{ path('avro_support_question_show', {'id': question.id, 'admin': 'true'}) }}"><i class="fa fa-arrow-left"></i> Back</a>
         {% else %}
-          <a class="btn btn-default pull-right" href="{{ path('avro_support_question_show', {'id': question.id}) }}"><i class="fa fa-arrow-left"></i> Back</a>
+          <a class="btn btn-default btn-lg pull-right" href="{{ path('avro_support_question_show', {'id': question.id}) }}"><i class="fa fa-arrow-left"></i> Back</a>
         {% endif %}
       {% else %}
-        {% if admin is same as(true) %}
-          <a class="btn btn-default pull-right" href="{{ path('avro_support_admin_list') }}"><i class="fa fa-arrow-left"></i> Back</a>
+        {% if admin %}
+          <a class="btn btn-default btn-lg pull-right" href="{{ path('avro_support_admin_list') }}"><i class="fa fa-arrow-left"></i> Back</a>
         {% else %}
-          <a class="btn btn-default pull-right" href="{{ path('avro_support_question_list') }}"><i class="fa fa-arrow-left"></i> Back</a>
+          <a class="btn btn-default btn-lg pull-right" href="{{ path('avro_support_question_list') }}"><i class="fa fa-arrow-left"></i> Back</a>
         {% endif %}
       {% endif %}
         <h1>Edit Question</h1>
@@ -21,7 +21,7 @@
     <form id="avro_support_question_form" method="POST" action="{{ path('avro_support_question_edit', { 'id': question.id }) }}" {{ form_enctype(form) }}>
 
       <div class="row">
-        {% include 'AvroSupportBundle:Question:form.html.twig' with { 'minRole': minRole } %}
+        {% include 'AvroSupportBundle:Question:form.html.twig' %}
       </div>
 
       <hr>

@@ -5,6 +5,8 @@
             <th>Last Updated</th>
             {#<th>{{ paginator.sortable('Title', 'title')|raw }}</th>#}
             {#<th>{{ paginator.sortable('UpdatedAt', 'updatedAt')|raw }}</th>#}
+            <th style="width: 80px;">Views</th>
+            <th style="width: 100px;">Answers</th>
             <th></th>
         </tr>
     </thead>
@@ -12,23 +14,32 @@
         {% for question in questions %}
             <tr>
                 <td>
-                    {% if adminArea is defined and adminArea is same as(true) %}
-                    <a href="{{ path('avro_support_question_show', {'id': question.id, 'admin': 'true'}) }}">{{ question.title }}</a>
+                    {% if question.isFaq %}
+                        <i class="fa fa-fw fa-exclamation-circle" title="FAQ"></i>
+                    {% endif %}
+                    {% if question.isPublic and not question.isFaq %}
+                        <i class="fa fa-fw fa-share-alt" title="Public"></i>
+                    {% endif %}
+                    {% if adminArea is defined and adminArea %}
+                        <a href="{{ path('avro_support_question_show', {'id': question.id, 'admin': 'true'}) }}">{{ question.title }}</a>
                     {% else %}
-                    <a href="{{ path('avro_support_question_show', {'id': question.id}) }}">{{ question.title }}</a>
+                        <a href="{{ path('avro_support_question_show', {'id': question.id}) }}">{{ question.title }}</a>
                     {% endif %}
                 </td>
                 <td class="center-align">{{ question.createdAt|date("F jS, Y") }}</td>
+                <td class="center-align">{{ question.views }}</td>
+                <td class="center-align">{{ question.answers.count }}</td>
                 <td>
+                    {% if is_granted(adminRole) or (not question.isPublic and not question.isFaq) %}
                     <div class="dropdown btn-group">
-                        {% if adminArea is defined and adminArea is same as(true) %}
+                        {% if adminArea is defined and adminArea %}
                         <a href="{{ path('avro_support_question_show', {'id':question.id, 'admin': 'true'}) }}" class="btn btn-default"><i class="fa fa-eye"></i> View</a>
                         {% else %}
                         <a href="{{ path('avro_support_question_show', {'id':question.id}) }}" class="btn btn-default"><i class="fa fa-eye"></i> View</a>
                         {% endif %}
                         <button class="btn btn-default dropdown-toggle" data-toggle="dropdown"> <span class="caret"></span></button>
-                        <ul class="dropdown-menu">
-                            {% if adminArea is defined and adminArea is same as(true) %}
+                        <ul class="dropdown-menu pull-right">
+                            {% if adminArea is defined and adminArea %}
                             <li><a id="editQuestion" href="{{ path('avro_support_question_edit', {'id': question.id, 'admin': 'true'}) }}"><i class="fa fa-pencil"></i> Edit</a></li>
                             {% else %}
                             <li><a id="editQuestion" href="{{ path('avro_support_question_edit', {'id': question.id}) }}"><i class="fa fa-pencil"></i> Edit</a></li>
@@ -42,6 +53,15 @@
                             {% endif %}
                         </ul>
                     </div>
+                    {% else %}
+                    <div>
+                        {% if adminArea is defined and adminArea %}
+                        <a href="{{ path('avro_support_question_show', {'id':question.id, 'admin': 'true'}) }}" class="btn btn-default"><i class="fa fa-eye"></i> View</a>
+                        {% else %}
+                        <a href="{{ path('avro_support_question_show', {'id':question.id}) }}" class="btn btn-default"><i class="fa fa-eye"></i> View</a>
+                        {% endif %}
+                    </div>
+                    {% endif %}
                 </td>
             </tr>
         {% else %}

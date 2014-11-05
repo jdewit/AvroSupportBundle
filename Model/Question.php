@@ -18,7 +18,8 @@ class Question implements QuestionInterface
     protected $answers;
     protected $categories;
     protected $hasResponse;
-    protected $isPublic = true;
+    protected $isPublic = false;
+    protected $isFaq = false;
     protected $isSolved = false;
     protected $views = 0;
     protected $solvedAt;
@@ -84,11 +85,11 @@ class Question implements QuestionInterface
 	}
 
 	public function getBody() {
-			return $this->body;
+		return $this->body;
 	}
 
 	public function setBody($body) {
-			$this->body = $body;
+		$this->body = $body;
 	}
 
     public function getHasResponse()
@@ -103,23 +104,31 @@ class Question implements QuestionInterface
     }
 
 	public function getViews() {
-			return $this->views;
+		return $this->views;
 	}
 
 	public function incrementViews() {
-			$this->views++;
+		$this->views++;
 	}
 
 	public function getIsPublic() {
-			return $this->isPublic;
+		return $this->isPublic;
 	}
 
 	public function setIsPublic($isPublic) {
-			$this->isPublic = $isPublic;
+		$this->isPublic = $isPublic;
 	}
 
+    public function getIsFaq() {
+        return $this->isFaq;
+    }
+
+    public function setIsFaq($isFaq) {
+        $this->isFaq = $isFaq;
+    }
+
 	public function getIsSolved() {
-			return $this->isSolved;
+		return $this->isSolved;
 	}
 
 	public function setIsSolved($isSolved) {
@@ -127,11 +136,11 @@ class Question implements QuestionInterface
 	}
 
 	public function getSolvedAt() {
-			return $this->solvedAt;
+		return $this->solvedAt;
 	}
 
 	public function setSolvedAt($solvedAt) {
-			$this->solvedAt = $solvedAt;
+		$this->solvedAt = $solvedAt;
 	}
 
     public function getAnswers()
@@ -177,19 +186,19 @@ class Question implements QuestionInterface
     }
 
 	public function getCreatedAt() {
-			return $this->createdAt;
+		return $this->createdAt;
 	}
 
 	public function setCreatedAt($createdAt) {
-			$this->createdAt = $createdAt;
+		$this->createdAt = $createdAt;
 	}
 
 	public function getUpdatedAt() {
-			return $this->updatedAt;
+		return $this->updatedAt;
 	}
 
 	public function setUpdatedAt($updatedAt) {
-			$this->updatedAt = $updatedAt;
+		$this->updatedAt = $updatedAt;
 	}
 }
 

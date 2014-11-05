@@ -65,7 +65,9 @@ class QuestionController extends ContainerAware
 
 		return $this->container->get('templating')->renderResponse('AvroSupportBundle:Question:new.html.twig', array(
             'form' => $form->createView(),
-            'minRole' => $this->container->getParameter('avro_support.min_role')
+            'minRole' => $this->container->getParameter('avro_support.min_role'),
+            'adminRole' => $this->container->getParameter('avro_support.admin_role'),
+            'isNew' => true
         ));
     }
 
@@ -128,31 +130,38 @@ class QuestionController extends ContainerAware
     public function editAction(Request $request, $id)
     {
         $questionManager = $this->container->get('avro_support.question.manager');
+        $context = $this->container->get('security.context');
+        $user = $context->getToken()->getUser();
+        $adminRole = $this->container->getParameter('avro_support.admin_role');
 
         $question = $questionManager->find($id);
 
-        $form = $this->container->get('avro_support.question.form');
+        if (!$context->isGranted($adminRole) && ($question->getIsPublic() || $question->getIsFaq())) {
+            $this->container->get('session')->getFlashBag()->set('danger', $translator->trans('avro_support.accessDenied.flash', array(), 'AvroSupportBundle'));
+        } else {
+            $form = $this->container->get('avro_support.question.form');
 
-        $form->setData($question);
+            $form->setData($question);
 
-        if ('POST' === $request->getMethod()) {
-            $form->bind($request);
-            if ($form->isValid()) {
-                $questionManager->update($question);
-                $translator = $this->container->get('translator');
+            if ('POST' === $request->getMethod()) {
+                $form->bind($request);
+                if ($form->isValid()) {
+                    $questionManager->update($question);
+                    $translator = $this->container->get('translator');
 
-                $this->container->get('session')->getFlashBag()->set('success', $translator->trans('avro_support.question.updated.flash', array(), 'AvroSupportBundle'));
+                    $this->container->get('session')->getFlashBag()->set('success', $translator->trans('avro_support.question.updated.flash', array(), 'AvroSupportBundle'));
 
-                $referer = $request->headers->get('referer');
-                $destination = $this->container->get('router')->generate('avro_support_question_show', array('id' => $question->getId()));
+                    $referer = $request->headers->get('referer');
+                    $destination = $this->container->get('router')->generate('avro_support_question_show', array('id' => $question->getId()));
 
-                if ($referer) {
-                    if (strpos($referer, 'admin') !== false) {
-                        $destination = $this->container->get('router')->generate('avro_support_question_show', array('id' => $question->getId(), 'admin' => true));
+                    if ($referer) {
+                        if (strpos($referer, 'admin') !== false) {
+                            $destination = $this->container->get('router')->generate('avro_support_question_show', array('id' => $question->getId(), 'admin' => true));
+                        }
                     }
-                }
 
-                return new RedirectResponse($destination);
+                    return new RedirectResponse($destination);
+                }
             }
         }
 
@@ -160,8 +169,10 @@ class QuestionController extends ContainerAware
             'form' => $form->createView(),
             'question' => $question,
             'minRole' => $this->container->getParameter('avro_support.min_role'),
+            'adminRole' => $adminRole,
             'admin' => $request->query->get('admin') === 'true' ? true : false,
-            'backToQuestion' => $request->query->get('backToQuestion') === 'true' ? true : false
+            'backToQuestion' => $request->query->get('backToQuestion') === 'true' ? true : false,
+            'userId' => $user->getId()
         ));
     }
 
@@ -170,15 +181,21 @@ class QuestionController extends ContainerAware
      */
     public function closeAction(Request $request, $id)
     {
+        $context = $this->container->get('security.context');
+        $adminRole = $this->container->getParameter('avro_support.admin_role');
         $question = $this->container->get('avro_support.question.manager')->find($id);
         $translator = $this->container->get('translator');
 
-        $question->setIsSolved(true);
-        $question->setSolvedAt(new \Datetime('now'));
+        if (!$context->isGranted($adminRole) && ($question->getIsPublic() || $question->getIsFaq())) {
+            $this->container->get('session')->getFlashBag()->set('danger', $translator->trans('avro_support.accessDenied.flash', array(), 'AvroSupportBundle'));
+        } else {
+            $question->setIsSolved(true);
+            $question->setSolvedAt(new \Datetime('now'));
 
-        $this->container->get('avro_support.question.manager')->update($question);
+            $this->container->get('avro_support.question.manager')->update($question);
 
-        $this->container->get('session')->getFlashBag()->set('success', $translator->trans('avro_support.question.solved.flash', array(), 'AvroSupportBundle'));
+            $this->container->get('session')->getFlashBag()->set('success', $translator->trans('avro_support.question.solved.flash', array(), 'AvroSupportBundle'));
+        }
 
         $referer = $request->headers->get('referer');
         $destination = $this->container->get('router')->generate('avro_support_question_list');
@@ -197,14 +214,20 @@ class QuestionController extends ContainerAware
      */
     public function openAction(Request $request, $id)
     {
+        $context = $this->container->get('security.context');
+        $adminRole = $this->container->getParameter('avro_support.admin_role');
         $question = $this->container->get('avro_support.question.manager')->find($id);
         $translator = $this->container->get('translator');
 
-        $question->setIsSolved(false);
+        if (!$context->isGranted($adminRole) && ($question->getIsPublic() || $question->getIsFaq())) {
+            $this->container->get('session')->getFlashBag()->set('danger', $translator->trans('avro_support.accessDenied.flash', array(), 'AvroSupportBundle'));
+        } else {
+            $question->setIsSolved(false);
 
-        $this->container->get('avro_support.question.manager')->update($question);
+            $this->container->get('avro_support.question.manager')->update($question);
 
-        $this->container->get('session')->getFlashBag()->set('success', $translator->trans('avro_support.question.reopened.flash', array(), 'AvroSupportBundle'));
+            $this->container->get('session')->getFlashBag()->set('success', $translator->trans('avro_support.question.reopened.flash', array(), 'AvroSupportBundle'));
+        }
 
         $referer = $request->headers->get('referer');
         $destination = $this->container->get('router')->generate('avro_support_question_list');
@@ -223,12 +246,18 @@ class QuestionController extends ContainerAware
      */
     public function deleteAction(Request $request, $id)
     {
+        $context = $this->container->get('security.context');
+        $adminRole = $this->container->getParameter('avro_support.admin_role');
         $question = $this->container->get('avro_support.question.manager')->find($id);
         $translator = $this->container->get('translator');
 
-        $this->container->get('avro_support.question.manager')->delete($question);
+        if (!$context->isGranted($adminRole) && ($question->getIsPublic() || $question->getIsFaq())) {
+            $this->container->get('session')->getFlashBag()->set('danger', $translator->trans('avro_support.accessDenied.flash', array(), 'AvroSupportBundle'));
+        } else {
+            $this->container->get('avro_support.question.manager')->delete($question);
 
-        $this->container->get('session')->getFlashBag()->set('success', $translator->trans('avro_support.question.deleted.flash', array(), 'AvroSupportBundle'));
+            $this->container->get('session')->getFlashBag()->set('success', $translator->trans('avro_support.question.deleted.flash', array(), 'AvroSupportBundle'));
+        }
 
         $referer = $request->headers->get('referer');
         $destination = $this->container->get('router')->generate('avro_support_question_list');
@@ -270,25 +299,31 @@ class QuestionController extends ContainerAware
      */
     public function addAnswerAction(Request $request, $id)
     {
+        $context = $this->container->get('security.context');
+        $adminRole = $this->container->getParameter('avro_support.admin_role');
         $questionManager = $this->container->get('avro_support.question.manager');
         $form = $this->container->get('avro_support.answer.form');
 
-        $question = $questionManager->find($id);
-        $answer = $questionManager->createAnswer();
+        if (!$context->isGranted($adminRole)) {
+            $this->container->get('session')->getFlashBag()->set('danger', $translator->trans('avro_support.accessDenied.flash', array(), 'AvroSupportBundle'));
+        } else {
+            $question = $questionManager->find($id);
+            $answer = $questionManager->createAnswer();
 
-        $form->setData($answer);
+            $form->setData($answer);
 
-        if ('POST' === $request->getMethod()) {
-            $form->bind($request);
-            $translator = $this->container->get('translator');
+            if ('POST' === $request->getMethod()) {
+                $form->bind($request);
+                $translator = $this->container->get('translator');
 
-            if ($form->isValid()) {
-                $answer = $form->getData();
-                $questionManager->addAnswer($question, $answer);
+                if ($form->isValid()) {
+                    $answer = $form->getData();
+                    $questionManager->addAnswer($question, $answer);
 
-                $request->getSession()->getFlashBag()->set('success', $translator->trans('avro_support.answer.added.flash', array(), 'AvroSupportBundle'));
-            } else {
-                $request->getSession()->getFlashBag()->set('danger', $translator->trans('avro_support.answer.add_failed.flash', array(), 'AvroSupportBundle'));
+                    $request->getSession()->getFlashBag()->set('success', $translator->trans('avro_support.answer.added.flash', array(), 'AvroSupportBundle'));
+                } else {
+                    $request->getSession()->getFlashBag()->set('danger', $translator->trans('avro_support.answer.add_failed.flash', array(), 'AvroSupportBundle'));
+                }
             }
         }
 
@@ -309,16 +344,22 @@ class QuestionController extends ContainerAware
      */
     public function deleteAnswerAction(Request $request, $questionId, $answerId)
     {
+        $context = $this->container->get('security.context');
+        $adminRole = $this->container->getParameter('avro_support.admin_role');
         $questionManager = $this->container->get('avro_support.question.manager');
         $translator = $this->container->get('translator');
 
-        $question = $questionManager->find($questionId);
+        if (!$context->isGranted($adminRole)) {
+            $this->container->get('session')->getFlashBag()->set('danger', $translator->trans('avro_support.accessDenied.flash', array(), 'AvroSupportBundle'));
+        } else {
+            $question = $questionManager->find($questionId);
 
-        $questionManager->removeAnswer($question, $answerId);
+            $questionManager->removeAnswer($question, $answerId);
 
-        $questionManager->update($question);
+            $questionManager->update($question);
 
-        $this->container->get('session')->getFlashBag()->set('success', $translator->trans('avro_support.answer.deleted.flash', array(), 'AvroSupportBundle'));
+            $this->container->get('session')->getFlashBag()->set('success', $translator->trans('avro_support.answer.deleted.flash', array(), 'AvroSupportBundle'));
+        }
 
         $referer = $request->headers->get('referer');
         $destination = $this->container->get('router')->generate('avro_support_question_show', array('id' => $question->getId()));

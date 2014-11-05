@@ -3,12 +3,17 @@
 {{ form_row(form.body) }}
 
 {% if not is_granted(minRole) %}
-    {{ form_row(form.authorName) }}
-    {{ form_row(form.authorEmail) }}
+  {{ form_row(form.authorName) }}
+  {{ form_row(form.authorEmail) }}
 {% endif %}
-{#{{ form_row(form.categorys) }}#}
-{#<label for="avro_support_question_isPublic">#}
-    {#{{ form_widget(form.isPublic) }}#}
-    {#{{ form.isPublic.vars['label'] }}#}
-{#</label>#}
+{#{{ form_row(form.categories) }}#}
+
+{% if isNew is not defined and (not question.isPublic or is_granted(adminRole)) %}
+  {{ form_row(form.isPublic) }}
+{% endif %}
+
+{% if is_granted(adminRole) %}
+  {{ form_row(form.isFaq) }}
+{% endif %}
+
 {{ form_widget(form._token) }}

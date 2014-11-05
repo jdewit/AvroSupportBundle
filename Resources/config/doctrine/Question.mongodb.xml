@@ -13,6 +13,7 @@ http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping.xsd">
         <field name="authorEmail" fieldName="authorEmail" type="string" />
         <field name="hasResponse" fieldName="hasResponse" type="boolean" />
         <field name="isPublic" fieldName="isPublic" type="boolean" />
+        <field name="isFaq" fieldName="isFaq" type="boolean" />
         <field name="isSolved" fieldName="isSolved" type="boolean" />
         <field name="views" fieldName="views" type="int" />
         <field name="solvedAt" fieldName="solvedAt" type="date" />

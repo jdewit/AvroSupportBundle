@@ -6,7 +6,7 @@
             <a class="btn btn-default btn-large pull-right" href="{{ path('avro_support_admin_list') }}"><i class="fa fa-wrench"></i> Admin</a>
         {% endif %}
         <h1>
-            My Questions&nbsp;
+            {% if query is not defined %}My {% endif %}Questions&nbsp;
             <div class="dropdown btn-group">
                 <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#">{{ filter }} <span class="caret"></span></a>
                 <ul class="dropdown-menu">

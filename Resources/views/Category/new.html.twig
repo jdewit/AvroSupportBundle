@@ -1,7 +1,7 @@
 {% extends 'AvroSupportBundle::layout.html.twig' %}
 {% block support_content %}
     <div class="page-header">
-        <a class="btn btn-large pull-right" href="{{ path('avro_support_category_list') }}"><i class="icon-arrow-left"></i> Back</a>
+        <a class="btn btn-lg pull-right" href="{{ path('avro_support_category_list') }}"><i class="icon-arrow-left"></i> Back</a>
         <h1>New Category</h1>
     </div>
     <form id="avro_support_question_form" class="orm-horizontal" method="post" href="{{ path('avro_support_category_new') }}" {{ form_enctype(form) }}>

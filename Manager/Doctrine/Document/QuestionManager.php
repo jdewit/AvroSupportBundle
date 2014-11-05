@@ -92,7 +92,7 @@ class QuestionManager extends BaseManager
     {
         $qb = $this->getQueryBuilder();
 
-        $qb->field('isPublic')->equals(true);
+        $qb->field('isFaq')->equals(true);
         $qb->sort('views', 'DESC');
 
         return $qb->getQuery();
@@ -162,6 +162,7 @@ class QuestionManager extends BaseManager
 
         $qb->addAnd($qb->expr()
             ->addOr($qb->expr()->field('isPublic')->equals(true))
+            ->addOr($qb->expr()->field('isFaq')->equals(true))
             ->addOr($qb->expr()->field('authorId')->equals($authorId))
         );
 

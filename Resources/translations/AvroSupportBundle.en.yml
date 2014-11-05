@@ -65,6 +65,9 @@ avro_support:
         deleted:
             flash: Answer deleted
 
+    accessDenied:
+        flash: You do not have sufficient permissions to perform that action
+
     category:
         created:
             flash: Category created

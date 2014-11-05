@@ -1,13 +1,15 @@
 <div>
     {% for question in questions %}
         <p class="pull-right muted">
-            <i class="icon-share-alt"></i> {{ question.views }} views<br>
-            <i class="icon-comment"></i> {{ question.answers.count }} answers
+            <i class="fa fa-fw fa-eye"></i> {{ question.views }} view{% if question.views is not same as(1) %}s{% endif %}<br>
+            <i class="fa fa-fw fa-comment"></i> {{ question.answers.count }} answer{% if question.answers.count is not same as(1) %}s{% endif %}
         </p>
         <h4>
             <a href="{{ path('avro_support_question_show', {'id': question.id}) }}">{{ question.title }}</a>
 
-            <small class="muted"> ({{ question.authorName }})</small>
+            {% if not hideAuthors %}
+                <small class="muted"> ({{ question.authorName }})</small>
+            {% endif %}
         </h4>
         <div>
             <p>{{ question.body | truncate('120') }}</p>
