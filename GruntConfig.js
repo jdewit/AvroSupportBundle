@@ -39,7 +39,7 @@ module.exports = function(grunt) {
               src:      'Resources/ng/src/*/views/**/*.html',
               dest:     'Resources/ng/dist/core.tpl.js',
               options: {
-                  url: function(url) { return url.replace('Resources/ng/src/', ''); }
+                  url: function(url) { return url.replace(__dirname + '/Resources/ng/src/', ''); }
               }
           }
       },
